@@ -14,13 +14,6 @@ interface TeamMember {
   permission_level: string
 }
 
-interface SortedFields {
-  id: boolean,
-  name: boolean,
-  email: boolean,
-  permission_level: boolean,
-}
-
 export default function TeamMembers() {
   const teamMembers: TeamMember[] = [
     { id: 1, name: "John Doe", email: "JohnDoe@gmail.com", permission_level: "Employee" },
@@ -30,7 +23,6 @@ export default function TeamMembers() {
   ];
 
   const [filtered, setFiltered] = useState<TeamMember[] | null>(teamMembers);
-  const [sorted, setSorted] = useState<SortedFields>({ id: false, name: false, email: false, permission_level: false });
 
   function updateFiltered(e: React.ChangeEvent<HTMLInputElement>) {
     setFiltered(
@@ -43,25 +35,6 @@ export default function TeamMembers() {
             item.permission_level.toLowerCase().includes(e.target.value.toLowerCase())
         )
     );
-  }
-
-  function sortTeamMembers(field: "id" | "name" | "email" | "permission_level") {
-
-    setSorted((current: SortedFields) => {
-      const nextSorted = { ...current, [field]: !current[field] };
-      const sortedArray = [...teamMembers];
-
-      if (field === "id") sortedArray.sort((a, b) => nextSorted.id ? b.id - a.id : a.id - b.id);
-
-      if (field === "name") sortedArray.sort((a, b) => nextSorted.name ? b.name.localeCompare(a.name) : a.name.localeCompare(b.name));
-
-      if (field === "email") sortedArray.sort((a, b) => nextSorted.email ? b.email.localeCompare(a.email) : a.email.localeCompare(b.email));
-
-      if (field === "permission_level") sortedArray.sort((a, b) => nextSorted.permission_level ? b.permission_level.localeCompare(a.permission_level) : a.permission_level.localeCompare(b.permission_level));
-
-      setFiltered(sortedArray);
-      return nextSorted;
-    });
   }
 
   return (
@@ -89,10 +62,10 @@ export default function TeamMembers() {
             <Table className="min-w-175">
               <TableHeader>
                 <TableRow className="bg-zinc-100 dark:bg-zinc-700">
-                  <TableHead className="w-12" onClick={() => sortTeamMembers("id")}>ID</TableHead>
-                  <TableHead className="w-36" onClick={() => sortTeamMembers("name")}>Name</TableHead>
-                  <TableHead className="w-60" onClick={() => sortTeamMembers("email")}>Email</TableHead>
-                  <TableHead className="w-48" onClick={() => sortTeamMembers("permission_level")}>Permission Level</TableHead>
+                  <TableHead className="w-12">ID</TableHead>
+                  <TableHead className="w-36">Name</TableHead>
+                  <TableHead className="w-60">Email</TableHead>
+                  <TableHead className="w-48">Permission Level</TableHead>
                   <TableHead className="w-16 text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
