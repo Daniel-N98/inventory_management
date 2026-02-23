@@ -20,13 +20,8 @@ interface InventoryItemDialogProps {
   setInventoryItems: React.Dispatch<React.SetStateAction<InventoryItem[]>>
 }
 
-const TEMP_CATEGORIES = [
-  { _id: "699c96e34ca8a4200a8fe30c", name: "Sports" },
-  { _id: "699c96e74ca8a4200a8fe30e", name: "Clothing" },
-  { _id: "699c96ec4ca8a4200a8fe310", name: "Electronics" },
-]
-
 export function InventoryItemsDialog({ setInventoryItems }: InventoryItemDialogProps) {
+  // TODO: If the form is invalid on create, use a toast at the top of the screen to tell the user about this.
   const categoryRef = useRef<HTMLInputElement>(null);
 
   async function createInventoryItem(event: React.FormEvent<HTMLFormElement>) {
@@ -86,7 +81,6 @@ export function InventoryItemsDialog({ setInventoryItems }: InventoryItemDialogP
               <Label>Category</Label>
               {/* CategoriesDropdown updates this hidden input on selection */}
               <CategoriesDropdown
-                categories={TEMP_CATEGORIES}
                 selected={null}
                 onSelect={(cat) => {
                   if (categoryRef.current) categoryRef.current.value = cat._id;

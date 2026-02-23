@@ -1,25 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { 
-  DropdownMenu, 
-  DropdownMenuTrigger, 
-  DropdownMenuContent 
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent
 } from "@/components/ui/dropdown-menu";
 import { Command, CommandInput, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
 import { CategoriesType } from "@/types/category";
 
 interface CategoriesDropdownProps {
-  categories: CategoriesType[];
   selected?: null;
   onSelect(category: CategoriesType): void;
 }
 
-export default function CategoriesDropdown({ categories, onSelect }: CategoriesDropdownProps) {
+export default function CategoriesDropdown({ onSelect }: CategoriesDropdownProps) {
   const [open, setOpen] = useState(false);
   const [selectedName, setSelectedName] = useState<string>("Select a category");
-  
+  const [categories, setCategories] = useState<CategoriesType[]>([]);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      const response = await fetch('/api/categories')
+      const json: {
+        success: boolean
+        data: CategoriesType[]
+      } = await response.json()
+      console.log(json);
+
+      setCategories(json.data);
+    }
+    fetchCategories();
+  }, [])
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} >
       <DropdownMenuTrigger asChild className="bg-white text-black hover:bg-white hover:border-zinc-950 hover:border">
