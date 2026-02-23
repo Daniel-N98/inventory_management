@@ -41,7 +41,7 @@ export default function Inventory() {
       </div>
 
       {/* Inventory Table */}
-      <InventoryTable filtered={filtered} />
+      <InventoryTable filtered={filtered} setInventoryItems={setInventoryItems}/>
     </main >
   )
 }

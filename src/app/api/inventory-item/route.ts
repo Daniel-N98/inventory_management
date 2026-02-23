@@ -1,5 +1,7 @@
 import dbConnect from '@/lib/mongodb'
+import Categories from '@/models/Categories'
 import InventoryItems from '@/models/InventoryItems'
+import { CategoriesType } from '@/types/category'
 import { InventoryItem } from '@/types/inventory'
 import { NextResponse } from 'next/server'
 
@@ -7,14 +9,17 @@ export async function GET() {
   await dbConnect()
 
   try {
-    const inventoryItems = await InventoryItems.find({}).lean()
+    const inventoryItems = await InventoryItems.find({}).lean();
+    const categories = await Categories.find({}).lean();
 
     const formatted: InventoryItem[] = inventoryItems.map((inventoryItem: InventoryItem) => ({
       _id: inventoryItem._id.toString(),
       name: inventoryItem.name,
       quantity: inventoryItem.quantity,
-      category: inventoryItem.category,
-    }))
+      category: (categories.find(
+        (category: CategoriesType) => category._id.toString() === inventoryItem.category.toString()
+      )?.name) || "Unknown",
+    }));
 
     return NextResponse.json(
       { success: true, data: formatted },
@@ -38,6 +43,72 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { success: true, data: item },
       { status: 201 }
+    )
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error },
+      { status: 400 }
+    )
+  }
+}
+
+export async function PATCH(request: Request) {
+  await dbConnect()
+
+  try {
+    const body: { _id: string; name: string, quantity: number, category: string } = await request.json();
+    const categoryRes = await Categories.findOne({ name: body.category }).lean({});
+
+    const updated = await InventoryItems.findByIdAndUpdate(
+      body._id,
+      { name: body.name, quantity: body.quantity, category: categoryRes._id },
+      { returnDocument: 'after' }
+    )
+
+    if (!updated) {
+      return NextResponse.json(
+        { success: false, message: 'Inventory Item not found' },
+        { status: 404 }
+      )
+    }
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          _id: updated._id.toString(),
+          name: updated.name,
+          quantity: updated.quantity,
+          category: body.category
+        },
+      },
+      { status: 200 }
+    )
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error },
+      { status: 400 }
+    )
+  }
+}
+
+export async function DELETE(request: Request) {
+  await dbConnect()
+
+  try {
+    const { _id }: { _id: string } = await request.json()
+
+    const deleted = await InventoryItems.findByIdAndDelete(_id)
+
+    if (!deleted) {
+      return NextResponse.json(
+        { success: false, message: 'Inventory Item not found' },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json(
+      { success: true, data: { _id } },
+      { status: 200 }
     )
   } catch (error) {
     return NextResponse.json(

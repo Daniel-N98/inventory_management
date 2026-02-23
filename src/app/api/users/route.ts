@@ -2,7 +2,7 @@ import dbConnect from "@/lib/mongodb"
 import Roles from "@/models/Roles";
 import User from "@/models/User";
 import { Role } from "@/types/role";
-import { UserType } from "@/types/User"
+import { UserType } from "@/types/user"
 import { NextResponse } from "next/server"
 
 export async function GET() {
