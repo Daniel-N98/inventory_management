@@ -55,7 +55,7 @@ export default function TeamMembers() {
                   <TableHead className="w-12">ID</TableHead>
                   <TableHead className="w-36">Name</TableHead>
                   <TableHead className="w-60">Email</TableHead>
-                  <TableHead className="w-48">Permission Level</TableHead>
+                  <TableHead className="w-48">Role</TableHead>
                   <TableHead className="w-16 text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
