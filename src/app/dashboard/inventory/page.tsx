@@ -6,13 +6,6 @@ import InventoryTable from "@/components/ui/inventory/inventoryTable";
 import { InventoryItem } from "@/types/inventory";
 import { useState } from "react";
 
-export interface SortedFields {
-  id: boolean,
-  name: boolean,
-  quantity: boolean
-  category: boolean
-}
-
 const TEMP_INVENTORY_ITEMS: InventoryItem[] = [
   { id: 1, name: "Laptop", quantity: 12, category: "Electronics" },
   { id: 2, name: "Monitor", quantity: 8, category: "Electronics" },
