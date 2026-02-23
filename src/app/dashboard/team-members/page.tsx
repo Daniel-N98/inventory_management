@@ -4,38 +4,28 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { fetchUsers } from "@/lib/api/users.api";
+import { UserType } from "@/types/User";
 import { Pencil } from "lucide-react";
-import { useState } from "react";
-
-interface TeamMember {
-  id: number,
-  name: string,
-  email: string,
-  permission_level: string
-}
+import { useEffect, useState } from "react";
 
 export default function TeamMembers() {
-  const teamMembers: TeamMember[] = [
-    { id: 1, name: "John Doe", email: "JohnDoe@gmail.com", permission_level: "Employee" },
-    { id: 2, name: "Paul Mayer", email: "PaulMay12@hotmail.com", permission_level: "Employee" },
-    { id: 3, name: "Susan Wischo", email: "SW99917@hotmail.com", permission_level: "Admin" },
-    { id: 4, name: "Jackson Forth", email: "JackoFor@gmail.com", permission_level: "Editor" },
-  ];
+  const [users, setUsers] = useState<UserType[]>([]);
+  const [search, setSearch] = useState('');
 
-  const [filtered, setFiltered] = useState<TeamMember[] | null>(teamMembers);
+  const filtered = users.filter((user: UserType) =>
+    user.name.toLowerCase().includes(search.toLowerCase()) ||
+    user.email.toLowerCase().includes(search.toLowerCase()) ||
+    user.role.toLowerCase().includes(search.toLowerCase())
+  );
 
-  function updateFiltered(e: React.ChangeEvent<HTMLInputElement>) {
-    setFiltered(
-      e.target.value.length === 0
-        ? teamMembers
-        : teamMembers.filter(
-          (item: TeamMember) =>
-            item.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-            item.email.toLowerCase().includes(e.target.value.toLowerCase()) ||
-            item.permission_level.toLowerCase().includes(e.target.value.toLowerCase())
-        )
-    );
-  }
+  useEffect(() => {
+    async function loadUsers() {
+      const usersRes: UserType[] = await fetchUsers();
+      setUsers(usersRes);
+    }
+    loadUsers();
+  }, []);
 
   return (
     <main className="flex-1 p-4 md:p-8 overflow-x-auto" >
@@ -48,7 +38,7 @@ export default function TeamMembers() {
       <div className="mb-4 md:mb-6">
         <Input
           placeholder="Search a member by (name, email, permission level)..."
-          onChange={(e) => updateFiltered(e)}
+          onChange={(e) => setSearch(e.target.value)}
           className="bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-50"
         />
       </div>
@@ -71,16 +61,16 @@ export default function TeamMembers() {
               </TableHeader>
               <TableBody>
                 {filtered &&
-                  filtered.map((item, idx) => (
+                  filtered.map((item: UserType, idx: number) => (
                     <TableRow
-                      key={item.id}
+                      key={item._id}
                       className={`${idx % 2 === 0 ? "bg-zinc-50 dark:bg-zinc-900" : "bg-white dark:bg-zinc-800"
                         } hover:bg-zinc-200 dark:hover:bg-zinc-700`}
                     >
-                      <TableCell>{item.id}</TableCell>
+                      <TableCell>{idx + 1}</TableCell>
                       <TableCell>{item.name}</TableCell>
                       <TableCell>{item.email}</TableCell>
-                      <TableCell>{item.permission_level}</TableCell>
+                      <TableCell>{item.role}</TableCell>
                       <TableCell className="flex justify-center">
                         <Pencil className="h-5 w-5 text-blue-600 hover:text-blue-700 cursor-pointer" />
                       </TableCell>
