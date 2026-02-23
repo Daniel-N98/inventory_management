@@ -7,10 +7,10 @@ import { InventoryItem } from "@/types/inventory";
 import { useState } from "react";
 
 const TEMP_INVENTORY_ITEMS: InventoryItem[] = [
-  { id: 1, name: "Laptop", quantity: 12, category: "Electronics" },
-  { id: 2, name: "Monitor", quantity: 8, category: "Electronics" },
-  { id: 3, name: "Keyboard", quantity: 25, category: "Accessories" },
-  { id: 4, name: "Chair", quantity: 5, category: "Furniture" },
+  { id: "1", name: "Laptop", quantity: 12, category: "Electronics" },
+  { id: "2", name: "Monitor", quantity: 8, category: "Electronics" },
+  { id: "3", name: "Keyboard", quantity: 25, category: "Accessories" },
+  { id: "4", name: "Chair", quantity: 5, category: "Furniture" },
 ];
 
 export default function Inventory() {
