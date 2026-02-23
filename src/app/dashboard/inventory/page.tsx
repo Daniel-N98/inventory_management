@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { InventoryItemsDialog } from "@/components/ui/inventory/addInventoryItemDialog";
 import InventoryTable from "@/components/ui/inventory/inventoryTable";
-import { fetchInventoryItems } from "@/lib/apiCalls";
+import { fetchInventoryItems } from "@/lib/api/inventory.api";
 import { InventoryItem } from "@/types/inventory";
 import { useEffect, useState } from "react";
 

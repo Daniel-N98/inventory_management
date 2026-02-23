@@ -12,7 +12,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { deleteCategoryById, updateCategoryById } from "@/lib/apiCalls"
+import { deleteCategoryById, updateCategoryById } from "@/lib/api/category.api"
 import { CategoriesType } from "@/types/category";
 import { Pencil, Trash } from "lucide-react";
 

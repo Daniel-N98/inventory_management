@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { CategoryDialog } from "@/components/ui/category/addCategoryDialog";
 import { CategoriesType } from "@/types/category";
 import CategoriesTable from "@/components/ui/category/categoryTable";
-import { fetchCategories } from "@/lib/apiCalls";
+import { fetchCategories } from "@/lib/api/category.api";
 
 export default function Categories() {
   const [categories, setCategories] = useState<CategoriesType[]>([]);

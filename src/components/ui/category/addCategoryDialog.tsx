@@ -12,7 +12,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { postCategory } from "@/lib/apiCalls"
+import { postCategory } from "@/lib/api/category.api"
 import { CategoriesType } from "@/types/category";
 
 interface CategoryDialogProps {

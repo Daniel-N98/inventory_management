@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label"
 import { InventoryItem } from "@/types/inventory"
 import CategoriesDropdown from "../category/categoriesDropdown"
 import { useRef } from "react"
-import { postInventoryItem } from "@/lib/apiCalls"
+import { postInventoryItem } from "@/lib/api/inventory.api"
 
 interface InventoryItemDialogProps {
   setInventoryItems: React.Dispatch<React.SetStateAction<InventoryItem[]>>
