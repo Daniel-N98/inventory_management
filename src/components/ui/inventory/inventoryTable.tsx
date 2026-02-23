@@ -9,7 +9,6 @@ interface InventoryTableProps {
 
 export default function InventoryTable({filtered}: InventoryTableProps) {
 
-
   return (
     <Card className="bg-white dark:bg-zinc-800 w-full overflow-x-auto">
       <CardHeader>

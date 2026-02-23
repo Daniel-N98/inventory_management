@@ -19,7 +19,7 @@ export interface SortedFields {
   category: boolean
 }
 
-const inventoryItems: InventoryItem[] = [
+const TEMP_INVENTORY_ITEMS: InventoryItem[] = [
   { id: 1, name: "Laptop", quantity: 12, category: "Electronics" },
   { id: 2, name: "Monitor", quantity: 8, category: "Electronics" },
   { id: 3, name: "Keyboard", quantity: 25, category: "Accessories" },
@@ -27,20 +27,13 @@ const inventoryItems: InventoryItem[] = [
 ];
 
 export default function Inventory() {
-  const [filtered, setFiltered] = useState<InventoryItem[]>(inventoryItems);
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(TEMP_INVENTORY_ITEMS);
+  const [search, setSearch] = useState('');
 
-  function updateFiltered(e: React.ChangeEvent<HTMLInputElement>) {
-    setFiltered(
-      e.target.value.length === 0
-        ? inventoryItems
-        : inventoryItems.filter(
-          (item: InventoryItem) =>
-            item.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
-            item.category.toLowerCase().includes(e.target.value.toLowerCase())
-        )
-    );
-  }
-
+  const filtered = inventoryItems.filter((inventoryItem: InventoryItem) =>
+    inventoryItem.name.toLowerCase().includes(search.toLowerCase()) ||
+    inventoryItem.category.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <main className="flex-1 p-4 md:p-8 overflow-x-auto" >
@@ -52,7 +45,7 @@ export default function Inventory() {
       <div className="mb-4 md:mb-6">
         <Input
           placeholder="Search product name or category..."
-          onChange={(e) => updateFiltered(e)}
+          onChange={(e) => setSearch(e.target.value)}
           className="bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-50"
         />
       </div>
