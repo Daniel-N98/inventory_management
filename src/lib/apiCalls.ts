@@ -1,4 +1,4 @@
-import { InventoryItem } from "@/types/inventory";
+import { CreatedInventoryItem, InventoryItem } from "@/types/inventory";
 import apiClient from "./api";
 import { CategoriesType } from "@/types/category";
 import toast from "react-hot-toast";
@@ -38,7 +38,7 @@ export async function fetchInventoryItems(): Promise<InventoryItem[]> {
   }
 }
 
-export async function postInventoryItem({ name, quantity, category }: any): Promise<InventoryItem | null> {
+export async function postInventoryItem({ name, quantity, category }: CreatedInventoryItem): Promise<InventoryItem | null> {
 
   try {
     const { data }: ServerResponse<InventoryItem> = await apiClient.post("/inventory-item", { name, quantity, category });
