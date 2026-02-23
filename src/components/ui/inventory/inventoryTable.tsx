@@ -2,12 +2,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { InventoryItem } from "@/types/inventory";
 import { Pencil } from "lucide-react";
+import { EditInventoryDialog } from "./editInventoryItemDialog";
 
 interface InventoryTableProps {
   filtered: InventoryItem[],
+  setInventoryItems: React.Dispatch<React.SetStateAction<InventoryItem[]>>
 }
 
-export default function InventoryTable({filtered}: InventoryTableProps) {
+export default function InventoryTable({ filtered, setInventoryItems }: InventoryTableProps) {
 
   return (
     <Card className="bg-white dark:bg-zinc-800 w-full overflow-x-auto">
@@ -42,7 +44,7 @@ export default function InventoryTable({filtered}: InventoryTableProps) {
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell>{item.category}</TableCell>
                       <TableCell className="flex justify-center">
-                        <Pencil className="h-5 w-5 text-blue-600 hover:text-blue-700 cursor-pointer" />
+                        <EditInventoryDialog inventoryItem={item} setInventoryItems={setInventoryItems} />
                       </TableCell>
                     </TableRow>
                   ))}

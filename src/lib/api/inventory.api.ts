@@ -23,3 +23,15 @@ export async function postInventoryItem({ name, quantity, category }: CreatedInv
     return null;
   }
 }
+
+export async function updateInventoryItemById(_id: string, name: string, quantity: number, category_id: string): Promise<InventoryItem | null> {
+  try {
+    console.log(_id, name, quantity, category_id);
+    
+    const { data }: ServerResponse<InventoryItem> = await apiClient.patch("/inventory-item", { _id, name, quantity, category_id });
+    return data;
+  } catch (error) {
+    toast.error("An error has occurred.");
+    return null;
+  }
+}
