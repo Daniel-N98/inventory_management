@@ -12,6 +12,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { deleteCategoryById } from "@/lib/apiCalls"
 import { CategoriesType } from "@/types/category";
 import { Pencil, Trash } from "lucide-react";
 
@@ -52,16 +53,11 @@ export function EditCategoryDialog({ category, setCategories }: EditCategoryProp
 
   async function deleteCategory() {
     try {
-      const res = await fetch("/api/categories", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ _id: category._id }),
-      });
-
-      const json = await res.json();
-      if (!res.ok || !json.success) return;
-      setCategories(prev =>
-        prev.filter(category => category._id !== json.data._id)
+      const categoryRes: CategoriesType | null = await deleteCategoryById(category._id);
+      if (!categoryRes) return;
+      
+      setCategories((prev: CategoriesType[]) =>
+        prev.filter((category: CategoriesType) => category._id !== categoryRes._id)
       )
     } catch (error) {
       console.log(error);

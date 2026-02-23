@@ -13,8 +13,18 @@ export async function fetchCategories(): Promise<CategoriesType[]> {
     const { data }: ServerResponse<CategoriesType[]> = await apiClient.get("/categories");
     return data;
   } catch (err) {
-    toast.error("An error has occured.");
+    toast.error("An error has occurred.");
     return [];
+  }
+}
+
+export async function deleteCategoryById(category_id: string): Promise<CategoriesType | null> {
+  try {
+    const { data }: ServerResponse<CategoriesType> = await apiClient.delete("/categories", { data: { _id: category_id } });
+    return data;
+  } catch (error) {
+    toast.error("An error has occurred.");
+    return null;
   }
 }
 
@@ -23,7 +33,7 @@ export async function fetchInventoryItems(): Promise<InventoryItem[]> {
     const { data }: ServerResponse<InventoryItem[]> = await apiClient.get("/inventory-item");
     return data;
   } catch (err) {
-    toast.error("An error has occured.");
+    toast.error("An error has occurred.");
     return [];
   }
 }
@@ -34,7 +44,7 @@ export async function postInventoryItem({ name, quantity, category }: any): Prom
     const { data }: ServerResponse<InventoryItem> = await apiClient.post("/inventory-item", { name, quantity, category });
     return data;
   } catch (error) {
-    toast.error("An error has occured.");
+    toast.error("An error has occurred.");
     return null;
   }
 }
