@@ -13,12 +13,21 @@ import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { InventoryItem } from "@/types/inventory"
+import CategoriesDropdown from "../category/categoriesDropdown"
+import { useRef } from "react"
 
 interface InventoryItemDialogProps {
   setInventoryItems: React.Dispatch<React.SetStateAction<InventoryItem[]>>
 }
 
+const TEMP_CATEGORIES = [
+  { _id: "699c96e34ca8a4200a8fe30c", name: "Sports" },
+  { _id: "699c96e74ca8a4200a8fe30e", name: "Clothing" },
+  { _id: "699c96ec4ca8a4200a8fe310", name: "Electronics" },
+]
+
 export function InventoryItemsDialog({ setInventoryItems }: InventoryItemDialogProps) {
+  const categoryRef = useRef<HTMLInputElement>(null);
 
   async function createInventoryItem(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -74,9 +83,16 @@ export function InventoryItemsDialog({ setInventoryItems }: InventoryItemDialogP
               <Input id="quantity" name="quantity" type="number" />
             </Field>
             <Field>
-              {/* Below will be changed to a dropdown of categories populated with existing categories. */}
-              <Label htmlFor="category">Category</Label>
-              <Input id="category" name="category" />
+              <Label>Category</Label>
+              {/* CategoriesDropdown updates this hidden input on selection */}
+              <CategoriesDropdown
+                categories={TEMP_CATEGORIES}
+                selected={null}
+                onSelect={(cat) => {
+                  if (categoryRef.current) categoryRef.current.value = cat._id;
+                }}
+              />
+              <input type="hidden" name="category" ref={categoryRef} />
             </Field>
           </FieldGroup>
           <DialogFooter>
