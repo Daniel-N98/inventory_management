@@ -1,5 +1,5 @@
 export type InventoryItem = {
-  id: string,
+  _id: string,
   name: string,
   quantity: number,
   category: string

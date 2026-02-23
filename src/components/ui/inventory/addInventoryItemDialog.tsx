@@ -42,7 +42,7 @@ export function InventoryItemsDialog({ setInventoryItems }: InventoryItemDialogP
     const json = await res.json()
 
     const newInventoryItem: InventoryItem = {
-      id: json.data._id,
+      _id: json.data._id,
       name: json.data.name,
       quantity: json.data.quantity,
       category: json.data.category,

@@ -31,13 +31,13 @@ export default function InventoryTable({filtered}: InventoryTableProps) {
                 {filtered &&
                   filtered.map((item: InventoryItem, idx: number) => (
                     <TableRow
-                      key={item.id}
+                      key={item._id}
                       className={`${idx % 2 === 0
                         ? "bg-zinc-50 dark:bg-zinc-900"
                         : "bg-white dark:bg-zinc-800"
                         } hover:bg-zinc-200 dark:hover:bg-zinc-700`}
                     >
-                      <TableCell>{item.id}</TableCell>
+                      <TableCell>{idx + 1}</TableCell>
                       <TableCell>{item.name}</TableCell>
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell>{item.category}</TableCell>

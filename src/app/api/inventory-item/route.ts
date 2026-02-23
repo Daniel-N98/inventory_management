@@ -10,7 +10,7 @@ export async function GET() {
     const inventoryItems = await InventoryItems.find({}).lean()
 
     const formatted: InventoryItem[] = inventoryItems.map((inventoryItem: InventoryItem) => ({
-      id: inventoryItem.id.toString(),
+      _id: inventoryItem._id.toString(),
       name: inventoryItem.name,
       quantity: inventoryItem.quantity,
       category: inventoryItem.category,
