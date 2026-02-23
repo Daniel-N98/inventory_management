@@ -1,6 +1,6 @@
-import { InventoryItem } from "@/app/dashboard/inventory/page";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { InventoryItem } from "@/types/inventory";
 import { Pencil } from "lucide-react";
 
 interface InventoryTableProps {

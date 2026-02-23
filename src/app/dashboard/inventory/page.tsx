@@ -3,14 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import InventoryTable from "@/components/ui/inventory/inventoryTable";
+import { InventoryItem } from "@/types/inventory";
 import { useState } from "react";
-
-export interface InventoryItem {
-  id: number,
-  name: string,
-  quantity: number,
-  category: string
-}
 
 export interface SortedFields {
   id: boolean,
