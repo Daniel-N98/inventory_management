@@ -4,23 +4,31 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import InventoryTable from "@/components/ui/inventory/inventoryTable";
 import { InventoryItem } from "@/types/inventory";
-import { useState } from "react";
-
-const TEMP_INVENTORY_ITEMS: InventoryItem[] = [
-  { id: "1", name: "Laptop", quantity: 12, category: "Electronics" },
-  { id: "2", name: "Monitor", quantity: 8, category: "Electronics" },
-  { id: "3", name: "Keyboard", quantity: 25, category: "Accessories" },
-  { id: "4", name: "Chair", quantity: 5, category: "Furniture" },
-];
+import { useEffect, useState } from "react";
 
 export default function Inventory() {
-  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>(TEMP_INVENTORY_ITEMS);
+  const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
   const [search, setSearch] = useState('');
 
   const filtered = inventoryItems.filter((inventoryItem: InventoryItem) =>
     inventoryItem.name.toLowerCase().includes(search.toLowerCase()) ||
     inventoryItem.category.toLowerCase().includes(search.toLowerCase())
   );
+
+  useEffect(() => {
+    async function fetchInventoryItems() {
+      const response = await fetch('/api/inventory-item');
+      const json: {
+        success: boolean
+        data: InventoryItem[]
+      } = await response.json()
+      console.log(json);
+
+      setInventoryItems(json.data);
+    }
+    fetchInventoryItems();
+  }, []);
+
 
   return (
     <main className="flex-1 p-4 md:p-8 overflow-x-auto" >
