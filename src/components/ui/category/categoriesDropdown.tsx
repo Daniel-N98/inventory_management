@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Command, CommandInput, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
 import { CategoriesType } from "@/types/category";
+import { fetchCategories } from "@/lib/apiCalls";
 
 interface CategoriesDropdownProps {
   selected?: null;
@@ -21,17 +22,11 @@ export default function CategoriesDropdown({ onSelect }: CategoriesDropdownProps
   const [categories, setCategories] = useState<CategoriesType[]>([]);
 
   useEffect(() => {
-    async function fetchCategories() {
-      const response = await fetch('/api/categories')
-      const json: {
-        success: boolean
-        data: CategoriesType[]
-      } = await response.json()
-      console.log(json);
-
-      setCategories(json.data);
+    async function loadCategories() {
+      const response = await fetchCategories();
+      setCategories(response);
     }
-    fetchCategories();
+    loadCategories();
   }, [])
 
   return (
