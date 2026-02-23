@@ -25,7 +25,7 @@ export default function Inventory() {
   return (
     <main className="flex-1 p-4 md:p-8 overflow-x-auto" >
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4">
-        <h1 className="text-2xl md:text-3xl font-semibold text-zinc-900 dark:text-zinc-50">Dashboard</h1>
+        <h1 className="text-2xl md:text-3xl font-semibold text-zinc-900 dark:text-zinc-50">Inventory</h1>
         <Button className="bg-blue-600 hover:bg-blue-700 text-white">Add Item</Button>
       </div>
 
