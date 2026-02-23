@@ -13,7 +13,7 @@ async function connectToDatabase() {
 }
 
 export async function POST(req: NextRequest) {
-  const { name, email, password, role = "Employee" } = await req.json();
+  const { name, email, password, role = "699cd39cb37779ad96ab9654" } = await req.json();
 
   if (!name || !email || !password) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     name,
     email,
     password: hashedPassword,
-    role: role || "Employee", // default role
+    role: role || "699cd39cb37779ad96ab9654", // default role
   });
 
   return NextResponse.json({ message: "User registered", id: result.insertedId });
