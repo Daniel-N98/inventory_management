@@ -12,7 +12,7 @@ export async function fetchCategories(): Promise<CategoriesType[]> {
   try {
     const { data }: ServerResponse<CategoriesType[]> = await apiClient.get("/categories");
     return data;
-  } catch (err) {
+  } catch (error) {
     toast.error("An error has occurred.");
     return [];
   }
@@ -32,7 +32,7 @@ export async function fetchInventoryItems(): Promise<InventoryItem[]> {
   try {
     const { data }: ServerResponse<InventoryItem[]> = await apiClient.get("/inventory-item");
     return data;
-  } catch (err) {
+  } catch (error) {
     toast.error("An error has occurred.");
     return [];
   }
