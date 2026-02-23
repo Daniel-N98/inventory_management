@@ -28,7 +28,6 @@ const inventoryItems: InventoryItem[] = [
 
 export default function Inventory() {
   const [filtered, setFiltered] = useState<InventoryItem[]>(inventoryItems);
-  const [sorted, setSorted] = useState<SortedFields>({ id: false, name: false, quantity: false, category: false });
 
   function updateFiltered(e: React.ChangeEvent<HTMLInputElement>) {
     setFiltered(
@@ -59,7 +58,7 @@ export default function Inventory() {
       </div>
 
       {/* Inventory Table */}
-      <InventoryTable inventoryItems={inventoryItems} filtered={filtered} setSorted={setSorted} setFiltered={setFiltered}/>
+      <InventoryTable filtered={filtered} />
     </main >
   )
 }
