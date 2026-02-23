@@ -56,11 +56,12 @@ export async function PATCH(request: Request) {
   await dbConnect()
 
   try {
-    const body: { _id: string; name: string, quantity: number, category_id: string } = await request.json();
+    const body: { _id: string; name: string, quantity: number, category: string } = await request.json();
+    const categoryRes = await Categories.findOne({ name: body.category }).lean({});
 
     const updated = await InventoryItems.findByIdAndUpdate(
       body._id,
-      { name: body.name, quantity: body.quantity, category: body.category_id },
+      { name: body.name, quantity: body.quantity, category: categoryRes._id },
       { returnDocument: 'after' }
     )
 
@@ -70,8 +71,6 @@ export async function PATCH(request: Request) {
         { status: 404 }
       )
     }
-    const category = await Categories.findOne({ _id: body.category_id }).lean();
-
     return NextResponse.json(
       {
         success: true,
@@ -79,9 +78,36 @@ export async function PATCH(request: Request) {
           _id: updated._id.toString(),
           name: updated.name,
           quantity: updated.quantity,
-          category: category.name
+          category: body.category
         },
       },
+      { status: 200 }
+    )
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error },
+      { status: 400 }
+    )
+  }
+}
+
+export async function DELETE(request: Request) {
+  await dbConnect()
+
+  try {
+    const { _id }: { _id: string } = await request.json()
+
+    const deleted = await InventoryItems.findByIdAndDelete(_id)
+
+    if (!deleted) {
+      return NextResponse.json(
+        { success: false, message: 'Inventory Item not found' },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json(
+      { success: true, data: { _id } },
       { status: 200 }
     )
   } catch (error) {

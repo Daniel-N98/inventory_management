@@ -24,11 +24,19 @@ export async function postInventoryItem({ name, quantity, category }: CreatedInv
   }
 }
 
-export async function updateInventoryItemById(_id: string, name: string, quantity: number, category_id: string): Promise<InventoryItem | null> {
+export async function updateInventoryItemById(_id: string, name: string, quantity: number, category: string): Promise<InventoryItem | null> {
   try {
-    console.log(_id, name, quantity, category_id);
-    
-    const { data }: ServerResponse<InventoryItem> = await apiClient.patch("/inventory-item", { _id, name, quantity, category_id });
+    const { data }: ServerResponse<InventoryItem> = await apiClient.patch("/inventory-item", { _id, name, quantity, category: category.length > 0 ? category : null });
+    return data;
+  } catch (error) {
+    toast.error("An error has occurred.");
+    return null;
+  }
+}
+
+export async function deleteInventoryItemById(inventoryItemId: string): Promise<InventoryItem | null> {
+  try {
+    const { data }: ServerResponse<InventoryItem> = await apiClient.delete("/inventory-item", { data: { _id: inventoryItemId } });
     return data;
   } catch (error) {
     toast.error("An error has occurred.");

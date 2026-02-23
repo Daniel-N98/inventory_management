@@ -12,7 +12,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { updateInventoryItemById } from "@/lib/api/inventory.api"
+import { deleteInventoryItemById, updateInventoryItemById } from "@/lib/api/inventory.api"
 import { InventoryItem } from "@/types/inventory"
 import { Pencil, Trash } from "lucide-react";
 import CategoriesDropdown from "../category/categoriesDropdown"
@@ -33,12 +33,12 @@ export function EditInventoryDialog({ inventoryItem, setInventoryItems }: EditIn
     const name = formData.get("name") as string
     const quantityRaw = formData.get("quantity");
     const quantity = quantityRaw !== null ? Number(quantityRaw) : 0;
-    const category = formData.get("category") as string
+    let category = formData.get("category") as string;
+    if (category.length === 0) category = inventoryItem.category;
 
     try {
       const inventoryResponse: InventoryItem | null = await updateInventoryItemById(inventoryItem._id, name, quantity, category);
-      console.log(inventoryResponse);
-      
+
       if (inventoryResponse === null) return;
       setInventoryItems((prev: InventoryItem[]) =>
         prev.map((inventoryItem: InventoryItem) =>
@@ -50,18 +50,18 @@ export function EditInventoryDialog({ inventoryItem, setInventoryItems }: EditIn
     }
   }
 
-  // async function deleteCategory() {
-  //   try {
-  //     const categoryRes: CategoriesType | null = await deleteCategoryById(category._id);
-  //     if (!categoryRes) return;
+  async function deleteInventoryItem() {
+    try {
+      const inventoryItemRes: InventoryItem | null = await deleteInventoryItemById(inventoryItem._id);
+      if (!inventoryItemRes) return;
 
-  //     setCategories((prev: CategoriesType[]) =>
-  //       prev.filter((category: CategoriesType) => category._id !== categoryRes._id)
-  //     )
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+      setInventoryItems((prev: InventoryItem[]) =>
+        prev.filter((inventoryItem: InventoryItem) => inventoryItem._id !== inventoryItemRes._id)
+      )
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <Dialog>
@@ -91,7 +91,7 @@ export function EditInventoryDialog({ inventoryItem, setInventoryItems }: EditIn
               <CategoriesDropdown
                 selected={null}
                 onSelect={(cat) => {
-                  if (categoryRef.current) categoryRef.current.value = cat._id;
+                  if (categoryRef.current) categoryRef.current.value = cat.name;
                 }}
               />
               <input type="hidden" name="category" ref={categoryRef} />
@@ -99,7 +99,7 @@ export function EditInventoryDialog({ inventoryItem, setInventoryItems }: EditIn
           </FieldGroup>
           <DialogFooter className="flex items-center w-full">
             <DialogClose asChild>
-              {/* <Button variant="destructive" className="hover:text-white" onClick={() => deleteCategory()}><Trash /></Button> */}
+              <Button variant="destructive" className="hover:text-white" onClick={() => deleteInventoryItem()}><Trash /></Button>
             </DialogClose>
 
             <div className="ml-auto flex gap-2">
