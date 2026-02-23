@@ -12,6 +12,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { postCategory } from "@/lib/api/category.api"
 import { CategoriesType } from "@/types/category";
 
 interface CategoryDialogProps {
@@ -25,21 +26,13 @@ export function CategoryDialog({ setCategories }: CategoryDialogProps) {
 
     const formData = new FormData(event.currentTarget)
     const name = formData.get("name") as string
-    console.log(name);
 
-    const res = await fetch("/api/categories", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name }),
-    });
-
-    if (!res.ok) return;
-
-    const json = await res.json()
+    const categoryResponse: CategoriesType | null = await postCategory(name);
+    if (categoryResponse === null) return;
 
     const newCategory: CategoriesType = {
-      _id: json.data._id,
-      name: json.data.name,
+      _id: categoryResponse._id,
+      name: categoryResponse.name,
     }
 
     setCategories((prev: CategoriesType[]) => [...prev, newCategory])

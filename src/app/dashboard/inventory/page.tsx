@@ -3,6 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { InventoryItemsDialog } from "@/components/ui/inventory/addInventoryItemDialog";
 import InventoryTable from "@/components/ui/inventory/inventoryTable";
+import { fetchInventoryItems } from "@/lib/api/inventory.api";
 import { InventoryItem } from "@/types/inventory";
 import { useEffect, useState } from "react";
 
@@ -16,17 +17,11 @@ export default function Inventory() {
   );
 
   useEffect(() => {
-    async function fetchInventoryItems() {
-      const response = await fetch('/api/inventory-item');
-      const json: {
-        success: boolean
-        data: InventoryItem[]
-      } = await response.json()
-      console.log(json);
-
-      setInventoryItems(json.data);
+    async function loadInventoryItems() {
+      const inventoryItemsRes: InventoryItem[] = await fetchInventoryItems();
+      setInventoryItems(inventoryItemsRes);
     }
-    fetchInventoryItems();
+    loadInventoryItems();
   }, []);
 
 

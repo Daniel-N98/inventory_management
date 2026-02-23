@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { CategoryDialog } from "@/components/ui/category/addCategoryDialog";
 import { CategoriesType } from "@/types/category";
 import CategoriesTable from "@/components/ui/category/categoryTable";
+import { fetchCategories } from "@/lib/api/category.api";
 
 export default function Categories() {
   const [categories, setCategories] = useState<CategoriesType[]>([]);
@@ -15,17 +16,11 @@ export default function Categories() {
   )
 
   useEffect(() => {
-    async function fetchCategories() {
-      const response = await fetch('/api/categories')
-      const json: {
-        success: boolean
-        data: CategoriesType[]
-      } = await response.json()
-      console.log(json);
-
-      setCategories(json.data);
+    async function getCategories() {
+      const categoriesRes: CategoriesType[] = await fetchCategories();
+      setCategories(categoriesRes);
     }
-    fetchCategories();
+    getCategories();
   }, []);
 
   return (

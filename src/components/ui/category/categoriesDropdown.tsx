@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Command, CommandInput, CommandEmpty, CommandGroup, CommandItem } from "@/components/ui/command";
 import { CategoriesType } from "@/types/category";
-import { fetchCategories } from "@/lib/apiCalls";
+import { fetchCategories } from "@/lib/api/category.api";
 
 interface CategoriesDropdownProps {
   selected?: null;

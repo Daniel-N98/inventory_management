@@ -12,6 +12,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { deleteCategoryById, updateCategoryById } from "@/lib/api/category.api"
 import { CategoriesType } from "@/types/category";
 import { Pencil, Trash } from "lucide-react";
 
@@ -27,22 +28,12 @@ export function EditCategoryDialog({ category, setCategories }: EditCategoryProp
 
     const formData = new FormData(event.currentTarget)
     const name = formData.get("name") as string
-
     try {
-      const res = await fetch("/api/categories", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ _id: category._id, name }),
-      })
-
-      const json = await res.json()
-      if (!res.ok || !json.success) return
-
-      const updatedCategory: CategoriesType = json.data
-
+      const categoryResponse: CategoriesType | null = await updateCategoryById(category._id, name);
+      if (categoryResponse === null) return;
       setCategories((prev: CategoriesType[]) =>
         prev.map((category: CategoriesType) =>
-          category._id === updatedCategory._id ? updatedCategory : category
+          category._id === categoryResponse._id ? categoryResponse : category
         )
       )
     } catch (err) {
@@ -52,16 +43,11 @@ export function EditCategoryDialog({ category, setCategories }: EditCategoryProp
 
   async function deleteCategory() {
     try {
-      const res = await fetch("/api/categories", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ _id: category._id }),
-      });
+      const categoryRes: CategoriesType | null = await deleteCategoryById(category._id);
+      if (!categoryRes) return;
 
-      const json = await res.json();
-      if (!res.ok || !json.success) return;
-      setCategories(prev =>
-        prev.filter(category => category._id !== json.data._id)
+      setCategories((prev: CategoriesType[]) =>
+        prev.filter((category: CategoriesType) => category._id !== categoryRes._id)
       )
     } catch (error) {
       console.log(error);

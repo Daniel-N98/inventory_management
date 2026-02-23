@@ -4,3 +4,9 @@ export type InventoryItem = {
   quantity: number,
   category: string
 }
+
+export type CreatedInventoryItem = {
+  name: string,
+  quantity: number,
+  category: string;
+}

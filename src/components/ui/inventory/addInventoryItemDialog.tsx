@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label"
 import { InventoryItem } from "@/types/inventory"
 import CategoriesDropdown from "../category/categoriesDropdown"
 import { useRef } from "react"
+import { postInventoryItem } from "@/lib/api/inventory.api"
 
 interface InventoryItemDialogProps {
   setInventoryItems: React.Dispatch<React.SetStateAction<InventoryItem[]>>
@@ -35,24 +36,14 @@ export function InventoryItemsDialog({ setInventoryItems }: InventoryItemDialogP
 
     console.log(name, quantity, category);
 
-    const res = await fetch("/api/inventory-item", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, quantity, category }),
-    });
+    const resultItem = await postInventoryItem({ name, quantity, category });
 
-    if (!res.ok) return;
-
-    const json = await res.json()
-
-    const newInventoryItem: InventoryItem = {
-      _id: json.data._id,
-      name: json.data.name,
-      quantity: json.data.quantity,
-      category: json.data.category,
+    if (resultItem === null) {
+      // Toast.
+      return;
     }
 
-    setInventoryItems((prev: InventoryItem[]) => [...prev, newInventoryItem])
+    setInventoryItems((prev: InventoryItem[]) => [...prev, resultItem]);
   }
 
   return (
