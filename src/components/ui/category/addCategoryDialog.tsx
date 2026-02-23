@@ -1,0 +1,79 @@
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Field, FieldGroup } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { CategoriesType } from "@/types/category";
+
+interface CategoryDialogProps {
+  setCategories: React.Dispatch<React.SetStateAction<CategoriesType[]>>
+}
+
+export function CategoryDialog({ setCategories }: CategoryDialogProps) {
+
+  async function createCategory(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget)
+    const name = formData.get("name") as string
+    console.log(name);
+
+    const res = await fetch("/api/categories", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name }),
+    });
+
+    if (!res.ok) return;
+
+    const json = await res.json()
+
+    const newCategory: CategoriesType = {
+      _id: json.data._id,
+      name: json.data.name,
+    }
+
+    setCategories((prev: CategoriesType[]) => [...prev, newCategory])
+  }
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button className="bg-blue-600 hover:bg-blue-700 text-white">Add Category</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-sm">
+        <form onSubmit={createCategory} className="space-y-4">
+          <DialogHeader>
+            <DialogTitle>Add Category</DialogTitle>
+            <DialogDescription>
+              Create a new category.
+            </DialogDescription>
+          </DialogHeader>
+          <FieldGroup>
+            <Field>
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" name="name" />
+            </Field>
+          </FieldGroup>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button type="submit">Create</Button>
+            </DialogClose>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog >
+  )
+}

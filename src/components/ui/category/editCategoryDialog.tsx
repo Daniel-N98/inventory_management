@@ -1,0 +1,108 @@
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Field, FieldGroup } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { CategoriesType } from "@/types/category";
+import { Pencil, Trash } from "lucide-react";
+
+interface EditCategoryProps {
+  category: CategoriesType,
+  setCategories: React.Dispatch<React.SetStateAction<CategoriesType[]>>
+}
+
+export function EditCategoryDialog({ category, setCategories }: EditCategoryProps) {
+
+  async function updateCategory(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget)
+    const name = formData.get("name") as string
+
+    try {
+      const res = await fetch("/api/categories", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ _id: category._id, name }),
+      })
+
+      const json = await res.json()
+      if (!res.ok || !json.success) return
+
+      const updatedCategory: CategoriesType = json.data
+
+      setCategories((prev: CategoriesType[]) =>
+        prev.map((category: CategoriesType) =>
+          category._id === updatedCategory._id ? updatedCategory : category
+        )
+      )
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  async function deleteCategory() {
+    try {
+      const res = await fetch("/api/categories", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ _id: category._id }),
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) return;
+      setCategories(prev =>
+        prev.filter(category => category._id !== json.data._id)
+      )
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Pencil className="h-5 w-5 text-blue-600 hover:text-blue-700 cursor-pointer" />
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-sm">
+        <form onSubmit={updateCategory} className="space-y-4">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">Edit Category</DialogTitle>
+            <DialogDescription>
+              Update the name of {category.name}
+            </DialogDescription>
+          </DialogHeader>
+          <FieldGroup>
+            <Field>
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" name="name" defaultValue={category.name} />
+            </Field>
+          </FieldGroup>
+          <DialogFooter className="flex items-center w-full">
+            <DialogClose asChild>
+              <Button variant="destructive" className="hover:text-white" onClick={() => deleteCategory()}><Trash /></Button>
+            </DialogClose>
+
+            <div className="ml-auto flex gap-2">
+              <DialogClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button type="submit">Save</Button>
+              </DialogClose>
+            </div>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog >
+  )
+}
