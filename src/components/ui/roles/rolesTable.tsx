@@ -39,7 +39,7 @@ export default function RolesTable({ filtered, setRoles }: RolesTableProps) {
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.permission_level}</TableCell>
                     <TableCell className="flex justify-center">
-                      <EditRoleDialog role={item} setRoles={setRoles} />
+                      {item.name === "Super" ? <></> : <EditRoleDialog role={item} setRoles={setRoles} />}
                     </TableCell>
                   </TableRow>
                 )) : <TableRow><TableCell><LoadingIcon /></TableCell></TableRow>}
