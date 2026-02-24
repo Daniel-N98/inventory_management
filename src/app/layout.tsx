@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import { Toaster } from "react-hot-toast";
+import { Suspense } from "react";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -26,14 +27,17 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className="flex-1">
-          <Toaster />
-          <Providers>{children}</Providers>
-        </div>
-      </body>
+      <Suspense fallback={<p>Could not load.</p>}>
+
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <div className="flex-1">
+            <Toaster />
+            <Providers>{children}</Providers>
+          </div>
+        </body>
+      </Suspense>
     </html>
   );
 }
