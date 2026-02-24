@@ -23,7 +23,6 @@ interface InventoryItemDialogProps {
 }
 
 export function InventoryItemsDialog({ setInventoryItems }: InventoryItemDialogProps) {
-  // TODO: If the form is invalid on create, use a toast at the top of the screen to tell the user about this.
   const categoryRef = useRef<HTMLInputElement>(null);
 
   async function createInventoryItem(event: React.FormEvent<HTMLFormElement>) {

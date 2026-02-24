@@ -9,9 +9,10 @@ import { fetchCategories } from "@/lib/api/category.api";
 
 export default function Categories() {
   const [categories, setCategories] = useState<CategoriesType[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [search, setSearch] = useState('')
 
-  const filtered = categories.filter(category =>
+  const filtered = loading ? null : categories.filter(category =>
     category.name.toLowerCase().includes(search.toLowerCase())
   )
 
@@ -19,6 +20,7 @@ export default function Categories() {
     async function getCategories() {
       const categoriesRes: CategoriesType[] = await fetchCategories();
       setCategories(categoriesRes);
+      setLoading(false);
     }
     getCategories();
   }, []);

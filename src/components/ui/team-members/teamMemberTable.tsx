@@ -2,9 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { UserType } from "@/types/user";
 import { EditTeamMemberDialog } from "./editTeamMemberDialog";
+import LoadingIcon from "../loadingIcon";
 
 interface TeamMemberTablePropd {
-  filtered: UserType[],
+  filtered: UserType[] | null,
   setUsers: React.Dispatch<React.SetStateAction<UserType[]>>
 }
 export default function TeamMemberTable({ filtered, setUsers }: TeamMemberTablePropd) {
@@ -28,7 +29,7 @@ export default function TeamMemberTable({ filtered, setUsers }: TeamMemberTableP
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered &&
+              {filtered ?
                 filtered.map((item: UserType, idx: number) => (
                   <TableRow
                     key={item._id}
@@ -46,7 +47,7 @@ export default function TeamMemberTable({ filtered, setUsers }: TeamMemberTableP
                       </TableCell>
                     }
                   </TableRow>
-                ))}
+                )) : <TableRow><TableCell><LoadingIcon /></TableCell></TableRow>}
             </TableBody>
           </Table>
         </div>

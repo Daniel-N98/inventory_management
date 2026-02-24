@@ -4,9 +4,10 @@ import { StatCard } from "./stat-card";
 
 interface StatsProps {
   dashboardData: DashboardData,
+  loading: boolean;
 }
 
-export function Stats({ dashboardData }: StatsProps) {
+export function Stats({ dashboardData, loading }: StatsProps) {
 
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -14,21 +15,25 @@ export function Stats({ dashboardData }: StatsProps) {
         title="Inventory Items"
         value={dashboardData.inventoryItems.length + ""}
         icon={<Package className="h-5 w-5" />}
+        loading={loading}
       />
       <StatCard
         title="Categories"
         value={dashboardData.categories.length + ""}
         icon={<Layers className="h-5 w-5" />}
+        loading={loading}
       />
       <StatCard
         title="Users"
         value={dashboardData.users.length + ""}
         icon={<Users className="h-5 w-5" />}
+        loading={loading}
       />
       <StatCard
         title="Roles"
         value={dashboardData.roles.length + ""}
         icon={<Shield className="h-5 w-5" />}
+        loading={loading}
       />
     </div>
   )
