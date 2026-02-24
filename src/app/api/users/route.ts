@@ -45,7 +45,8 @@ export async function PATCH(request: Request) {
   try {
     const body: { _id: string; role: string } = await request.json();
     const session = await getServerSession(authOptions);
-    if (session?.user.id === body._id) {
+    const currentUser = await User.findById(session?.user.id).lean();
+    if (session?.user.id === body._id && currentUser.superUser === false) {
       return NextResponse.json(
       { success: false, error: "You cannot edit your own role." }
     ); 

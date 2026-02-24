@@ -21,6 +21,7 @@ export async function requireAuth(
       { success: false, error: "Not authenticated" }
     );
   }
+  if (user.superUser) return session;
   const userRole = await Roles.findOne({ _id: user.role }).lean();
 
   if (!user || (requiredRole && userRole.permission_level < role.permission_level)) {

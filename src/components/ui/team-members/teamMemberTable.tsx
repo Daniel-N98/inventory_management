@@ -36,12 +36,15 @@ export default function TeamMemberTable({ filtered, setUsers }: TeamMemberTableP
                       } hover:bg-zinc-200 dark:hover:bg-zinc-700`}
                   >
                     <TableCell>{idx + 1}</TableCell>
-                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.name + " " + (item.superUser === true ? "*" : "")}</TableCell>
                     <TableCell>{item.email}</TableCell>
                     <TableCell>{item.role}</TableCell>
-                    <TableCell className="flex justify-center">
-                      <EditTeamMemberDialog user={item} setUsers={setUsers} />
-                    </TableCell>
+                    {/* Only display edit symbol if this user is not the superUser. */}
+                    {!item.superUser &&
+                      <TableCell className="flex justify-center">
+                        <EditTeamMemberDialog user={item} setUsers={setUsers} />
+                      </TableCell>
+                    }
                   </TableRow>
                 ))}
             </TableBody>
