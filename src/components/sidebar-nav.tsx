@@ -2,13 +2,14 @@
 
 import { signOut } from "next-auth/react";
 import { Button } from "./ui/button";
-import { Home, Package, ListChecks, Settings, Users } from "lucide-react";
+import { Home, Package, ListChecks, Settings, Users, Shield } from "lucide-react";
 
 export default function SideNav() {
   const navItems = [
     { label: "Dashboard", icon: <Home className="h-4 w-4" />, href: "/dashboard" },
     { label: "Inventory", icon: <Package className="h-4 w-4" />, href: "/dashboard/inventory" },
     { label: "Categories", icon: <ListChecks className="h-4 w-4" />, href: "/dashboard/categories" },
+    { label: "Roles", icon: <Shield className="h-4 w-4" />, href: "/dashboard/roles" },
     { label: "Team Members", icon: <Users className="h-4 w-4" />, href: "/dashboard/team-members" },
   ];
 
