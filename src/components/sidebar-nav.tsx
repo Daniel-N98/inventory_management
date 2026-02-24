@@ -37,7 +37,7 @@ export default function SideNav() {
             className="group flex items-center gap-2 justify-center md:justify-start text-zinc-800 dark:text-zinc-50 hover:bg-zinc-100 dark:hover:bg-zinc-700 w-full"
             asChild
           >
-            <a href={"dashboard/settings"} className="flex items-center gap-2 w-full">
+            <a href={"/dashboard/settings"} className="flex items-center gap-2 w-full">
               <Settings className="h-4 w-4" />
               <span className="hidden md:inline">Settings</span>
             </a>
