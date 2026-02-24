@@ -54,3 +54,42 @@ export async function POST(request: Request) {
     )
   }
 }
+
+export async function PATCH(request: Request) {
+  await dbConnect()
+  // Check user authentication
+  const auth = await requireAuth("Editor");
+  if (!(auth && "user" in auth)) return auth as NextResponse;
+
+  try {
+    const body: { _id: string; name: string, permission_level: number } = await request.json();
+    const updated = await Roles.findByIdAndUpdate(
+      body._id,
+      { name: body.name, permission_level: body.permission_level },
+      { returnDocument: 'after' }
+    )
+
+    if (!updated) {
+      return NextResponse.json(
+        { success: false, message: 'Role not found' },
+        { status: 404 }
+      )
+    }
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          _id: updated._id.toString(),
+          name: updated.name,
+          permission_level: updated.permission_level,
+        },
+      },
+      { status: 200 }
+    )
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error },
+      { status: 400 }
+    )
+  }
+}

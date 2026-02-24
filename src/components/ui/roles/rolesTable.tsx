@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import LoadingIcon from "../loadingIcon";
 import { Role } from "@/types/role";
+import { EditRoleDialog } from "./editRoleDialog";
 
 interface RolesTableProps {
   filtered: Role[] | null,
@@ -37,9 +38,8 @@ export default function RolesTable({ filtered, setRoles }: RolesTableProps) {
                     <TableCell>{idx + 1}</TableCell>
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.permission_level}</TableCell>
-                    {/* Only display edit symbol if this user is not the superUser. */}
                     <TableCell className="flex justify-center">
-                      {/* <EditTeamMemberDialog role={item} setUsers={setRoles} /> */}
+                      <EditRoleDialog role={item} setRoles={setRoles} />
                     </TableCell>
                   </TableRow>
                 )) : <TableRow><TableCell><LoadingIcon /></TableCell></TableRow>}
