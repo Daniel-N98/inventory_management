@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import User from "@/models/User";
 import dbConnect from "@/lib/mongodb";
+import Roles from "@/models/Roles";
 
 export async function POST(req: NextRequest) {
-  const { name, email, password, role = "699cd39cb37779ad96ab9654" } = await req.json();
+  const { name, email, password } = await req.json();
 
   if (!name || !email || !password) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -15,7 +16,27 @@ export async function POST(req: NextRequest) {
   // check if user exists
   const existing = await User.findOne({ email });
   if (existing) {
-    return NextResponse.json({ error: "User already exists" }, { status: 400 });
+    return NextResponse.json({ error: "User already exists" });
+  }
+
+  const allUsers = await User.find({}).lean();
+  let roles = await Roles.find({}).lean();
+  let roleToSet;
+
+  // Ensure at least one role exists
+  if (roles.length === 0) {
+    roleToSet = await Roles.create({ name: "default", permission_level: 0 });
+    roles = [roleToSet];
+  }
+
+  const existingUsers = allUsers.length > 0;
+
+  if (!existingUsers) {
+    // No users yet -> assign highest permission role
+    roleToSet = roles.reduce((max, r) => r.permission_level > max.permission_level ? r : max, roles[0]);
+  } else {
+    // There are users -> assign lowest permission role
+    roleToSet = roles.reduce((min, r) => r.permission_level < min.permission_level ? r : min, roles[0]);
   }
 
   // hash password with bcrypt
@@ -24,7 +45,7 @@ export async function POST(req: NextRequest) {
     name,
     email,
     password: hashedPassword,
-    role: role || "699cd39cb37779ad96ab9654", // default role
+    role: roleToSet._id, // default role
   });
 
   return NextResponse.json({ message: "User registered", id: result.insertedId });

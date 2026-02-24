@@ -8,6 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Field, FieldLabel, FieldDescription } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { postUser } from "@/lib/api/users.api";
+import { UserType } from "@/types/user";
 
 export default function AuthPage() {
   const router = useRouter();
@@ -52,18 +54,13 @@ export default function AuthPage() {
     const { name, email, password } = registerData;
 
     try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
-
-      if (!res.ok) {
-        setError("Registration failed");
+      const res: UserType | string = await postUser(name, email, password);
+      if (typeof res === "string") {
+        console.log(res);
+        setError(res);
         setLoading(false);
         return;
       }
-
       // Auto-login after registration
       const loginRes = await signIn("credentials", { redirect: false, email, password });
       setLoading(false);
