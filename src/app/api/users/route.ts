@@ -49,11 +49,10 @@ export async function PATCH(request: Request) {
     const currentUser = await User.findById(session?.user.id).lean();
     if (session?.user.id === body._id && currentUser.superUser === false) {
       return NextResponse.json(
-      { success: false, error: "You cannot edit your own role." }
-    ); 
+        { success: false, error: "You cannot edit your own role." }
+      );
     }
     const roleFound = await Roles.findOne({ name: body.role }).lean();
-    
     const auth = await requireAuth(body.role); // User cannot update a user's role beyond their current role.
     if (!(auth && "user" in auth)) return auth as NextResponse;
 
@@ -99,7 +98,12 @@ export async function DELETE(request: Request) {
 
   try {
     const { _id }: { _id: string } = await request.json()
-
+    const session = await getServerSession(authOptions);
+    if (session?.user.id === _id) {
+      return NextResponse.json(
+        { success: false, error: "You cannot delete your own account." }
+      );
+    }
     const deleted = await User.findByIdAndDelete(_id)
 
     if (!deleted) {
