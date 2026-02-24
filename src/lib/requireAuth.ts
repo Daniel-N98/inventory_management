@@ -16,8 +16,7 @@ export async function requireAuth(
   }
   const role = await Roles.findOne({ name: requiredRole }).lean();
   const user = await User.findOne({ _id: session.user.id }).lean();
-  console.log(role, user);
-  
+
   if (!user || (requiredRole && user?.role.toString() !== role._id.toString())) {
     return NextResponse.json(
       { success: false, error: "No access." }
