@@ -53,7 +53,7 @@ export async function POST(request: Request) {
 export async function PATCH(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth = await requireAuth("Admin");
+  const auth = await requireAuth("Edtior");
   if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {
