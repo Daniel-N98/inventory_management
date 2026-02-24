@@ -1,6 +1,7 @@
 import { InventoryItem } from "@/types/inventory";
 import { Card, CardContent, CardHeader, CardTitle } from "../card";
 import { CategoriesType } from "@/types/category";
+import Link from "next/link";
 
 interface InventoryItemProps {
   inventory_items: InventoryItem[],
@@ -43,10 +44,10 @@ export function InventoryOverview({ inventory_items, categories }: InventoryItem
         <CardTitle>Inventory Overview</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3 text-sm text-zinc-600 dark:text-zinc-300">
-        <p>• Items low in stock: <strong>{itemsLowInStock.length}</strong></p>
-        <p>• Recently added items: <strong>{recentlyAddedItems.length}</strong></p>
-        <p>• Latest category: <strong>{latestCategory ? latestCategory.name : 'No category'}</strong></p>
-        <p>• Largest category: <strong>{largestCategory ? largestCategory.name : 'No category'}</strong></p>
+        <p>• <Link href={"/dashboard/inventory"} className="text-blue-600 underline">Items</Link> low in stock: <strong>{itemsLowInStock.length}</strong></p>
+        <p>• Recently added <Link href={"/dashboard/inventory"} className="text-blue-600 underline">items:</Link> <strong>{recentlyAddedItems.length}</strong></p>
+        <p>• Latest <Link href={"/dashboard/categories"} className="text-blue-600 underline">category:</Link> <strong>{latestCategory ? latestCategory.name : 'No category'}</strong></p>
+        <p>• Largest <Link href={"/dashboard/categories"} className="text-blue-600 underline">category:</Link> <strong>{largestCategory ? largestCategory.name : 'No category'}</strong></p>
       </CardContent>
     </Card>
   )
