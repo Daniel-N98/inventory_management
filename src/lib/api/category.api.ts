@@ -29,7 +29,11 @@ export async function postCategory(name: string): Promise<CategoriesType | null>
 
 export async function updateCategoryById(_id: string, name: string): Promise<CategoriesType | null> {
   try {
-    const { data }: ServerResponse<CategoriesType> = await apiClient.patch("/categories", { _id, name });
+    const { data, error }: ServerResponse<CategoriesType> = await apiClient.patch("/categories", { _id, name });
+    if (error) {
+      toast.error(error);
+      return null;
+    }
     return data;
   } catch (error) {
     toast.error("An error has occurred.");

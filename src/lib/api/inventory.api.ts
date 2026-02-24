@@ -16,7 +16,11 @@ export async function fetchInventoryItems(): Promise<InventoryItem[]> {
 export async function postInventoryItem({ name, quantity, category }: CreatedInventoryItem): Promise<InventoryItem | null> {
 
   try {
-    const { data }: ServerResponse<InventoryItem> = await apiClient.post("/inventory-item", { name, quantity, category });
+    const { data, error }: ServerResponse<InventoryItem> = await apiClient.post("/inventory-item", { name, quantity, category });
+    if (error) {
+      toast.error(error);
+      return null;
+    }
     return data;
   } catch (error) {
     toast.error("An error has occurred.");
@@ -26,7 +30,11 @@ export async function postInventoryItem({ name, quantity, category }: CreatedInv
 
 export async function updateInventoryItemById(_id: string, name: string, quantity: number, category: string): Promise<InventoryItem | null> {
   try {
-    const { data }: ServerResponse<InventoryItem> = await apiClient.patch("/inventory-item", { _id, name, quantity, category: category.length > 0 ? category : null });
+    const { data, error }: ServerResponse<InventoryItem> = await apiClient.patch("/inventory-item", { _id, name, quantity, category: category.length > 0 ? category : null });
+    if (error) {
+      toast.error(error);
+      return null;
+    }
     return data;
   } catch (error) {
     toast.error("An error has occurred.");
@@ -36,7 +44,11 @@ export async function updateInventoryItemById(_id: string, name: string, quantit
 
 export async function deleteInventoryItemById(inventoryItemId: string): Promise<InventoryItem | null> {
   try {
-    const { data }: ServerResponse<InventoryItem> = await apiClient.delete("/inventory-item", { data: { _id: inventoryItemId } });
+    const { data, error }: ServerResponse<InventoryItem> = await apiClient.delete("/inventory-item", { data: { _id: inventoryItemId } });
+    if (error) {
+      toast.error(error);
+      return null;
+    }
     return data;
   } catch (error) {
     toast.error("An error has occurred.");

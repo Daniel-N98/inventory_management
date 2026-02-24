@@ -26,7 +26,11 @@ export async function fetchUsers(): Promise<UserType[]> {
 
 export async function updateUserRole(_id: string, role: string): Promise<UserType | null> {
   try {
-    const { data }: ServerResponse<UserType> = await apiClient.patch("/users", { _id, role });
+    const { data, error }: ServerResponse<UserType> = await apiClient.patch("/users", { _id, role });
+    if (error) {
+      toast.error(error);
+      return null;
+    }
     return data;
   } catch (error) {
     toast.error("An error has occurred.");
@@ -36,7 +40,11 @@ export async function updateUserRole(_id: string, role: string): Promise<UserTyp
 
 export async function deleteUserById(userId: string): Promise<UserType | null> {
   try {
-    const { data }: ServerResponse<UserType> = await apiClient.delete("/users", { data: { _id: userId } });
+    const { data, error }: ServerResponse<UserType> = await apiClient.delete("/users", { data: { _id: userId } });
+    if (error) {
+      toast.error(error);
+      return null;
+    }
     return data;
   } catch (error) {
     toast.error("An error has occurred.");
