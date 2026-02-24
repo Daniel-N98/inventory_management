@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -13,6 +13,7 @@ import { UserType } from "@/types/user";
 import toast from "react-hot-toast";
 
 export default function AuthPage() {
+  const searchParams = useSearchParams();
   const router = useRouter();
 
   const [loginData, setLoginData] = useState({ email: "", password: "" });
@@ -63,7 +64,8 @@ export default function AuthPage() {
     const { name, email, password } = registerData;
 
     try {
-      const res: UserType | string = await postUser(name, email, password);
+      const token = searchParams.get("token");
+      const res: UserType | string = await postUser(name, email, password, token);
       if (typeof res === "string") {
         console.log(res);
         setError(res);

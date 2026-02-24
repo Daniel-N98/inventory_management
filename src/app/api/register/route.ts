@@ -5,9 +5,10 @@ import dbConnect from "@/lib/mongodb";
 import Roles from "@/models/Roles";
 import crypto from "crypto";
 import apiClient from "@/lib/api";
+import Invitation from "@/models/Invitation";
 
 export async function POST(req: NextRequest) {
-  const { name, email, password } = await req.json();
+  const { name, email, password, token } = await req.json();
 
   if (!name || !email || !password) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -50,6 +51,16 @@ export async function POST(req: NextRequest) {
     superRole = await Roles.create({ name: "Super", permission_level: 100 }); // Create super role if not already exists.
   } catch (error) { };
 
+  let invitedData;
+  if (token) {
+    const data = await Invitation.findOne({ invitationToken: token }).lean();
+    if (email === data.email) {
+      invitedData = data;
+    } else {
+      return NextResponse.json({ error: "Please use the email that was invited." });
+    }
+  }
+
   const result = await User.create({
     name,
     email,
@@ -57,8 +68,9 @@ export async function POST(req: NextRequest) {
     verified: false,
     verificationToken,
     superUser: !existingUsers, // Super user is for the first signed up user. Allows complete permissions over everything.
-    role: (!existingUsers && superRole) ? superRole._id : roleToSet._id, // SuperUser role if no users, otherwise default.
+    role: invitedData ? invitedData.role : (!existingUsers && superRole) ? superRole._id : roleToSet._id, // SuperUser role if no users, otherwise default.
   });
+  if (invitedData) await Invitation.findByIdAndDelete(invitedData._id);
   await apiClient.post(`${process.env.NEXT_PUBLIC_APP_URL}/api/email-verification`, { to: email, name, verificationLink });
   return NextResponse.json({ message: "User registered", id: result.insertedId });
 }

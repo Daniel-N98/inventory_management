@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { InviteTeamMemberDialog } from "@/components/ui/team-members/inviteTeamMemberDialog";
 import TeamMemberTable from "@/components/ui/team-members/teamMemberTable";
 import { fetchUsers } from "@/lib/api/users.api";
 import { UserType } from "@/types/user";
@@ -31,7 +31,7 @@ export default function TeamMembers() {
     <main className="flex-1 p-4 md:p-8 overflow-x-auto" >
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4">
         <h1 className="text-2xl md:text-3xl font-semibold text-zinc-900 dark:text-zinc-50">Team Members</h1>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white" disabled>Add Member</Button>
+        <InviteTeamMemberDialog />
       </div>
 
       {/* Search / Filter */}
