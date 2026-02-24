@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import TeamMemberTable from "@/components/ui/team-members/teamMemberTable";
-import { fetchUsers, updateUserRole } from "@/lib/api/users.api";
+import { fetchUsers } from "@/lib/api/users.api";
 import { UserType } from "@/types/user";
 import { useEffect, useState } from "react";
 
