@@ -3,7 +3,6 @@
 import { Input } from "@/components/ui/input";
 import { AddRoleDialog } from "@/components/ui/roles/addNewRoleDialog";
 import RolesTable from "@/components/ui/roles/rolesTable";
-import { InviteTeamMemberDialog } from "@/components/ui/team-members/inviteTeamMemberDialog";
 import { fetchRoles } from "@/lib/api/users.api";
 import { Role } from "@/types/role";
 import { useEffect, useState } from "react";
@@ -18,7 +17,7 @@ export default function Roles() {
   useEffect(() => {
     async function loadRoles() {
       const rolesRes: Role[] = await fetchRoles();
-      setRoles(rolesRes);
+      setRoles(rolesRes.sort((a, b) => a.permission_level - b.permission_level));
       setLoading(false);
     }
     loadRoles();
