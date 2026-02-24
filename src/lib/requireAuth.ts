@@ -16,8 +16,14 @@ export async function requireAuth(
   }
   const role = await Roles.findOne({ name: requiredRole }).lean();
   const user = await User.findOne({ _id: session.user.id }).lean();
+  if (!user) {
+    return NextResponse.json(
+      { success: false, error: "Not authenticated" }
+    );
+  }
+  const userRole = await Roles.findOne({ _id: user.role }).lean();
 
-  if (!user || (requiredRole && user?.role.toString() !== role._id.toString())) {
+  if (!user || (requiredRole && userRole.permission_level < role.permission_level)) {
     return NextResponse.json(
       { success: false, error: "No access." }
     );

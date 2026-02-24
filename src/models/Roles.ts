@@ -5,6 +5,11 @@ const RolesSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+  },
+  permission_level: {
+    type: Number,
+    required: true,
+    unique: true
   }
 });
 

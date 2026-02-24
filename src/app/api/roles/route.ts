@@ -12,6 +12,7 @@ export async function GET() {
     const formatted: Role[] = roles.map((role: Role) => ({
       _id: role._id.toString(),
       name: role.name,
+      permission_level: role.permission_level
     }))
 
     return NextResponse.json(
