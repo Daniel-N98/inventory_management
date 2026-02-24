@@ -37,11 +37,17 @@ export async function POST(request: Request) {
   await dbConnect()
   // Check should be done to ensure the User is able to create InventoryItems.
   try {
-    const body = await request.json()
-    const item = await InventoryItems.create(body)
+    const body = await request.json();
+    const item = await InventoryItems.create(body);
+    const category = await Categories.findOne({ _id: item.category }).lean();
+
+    const formattedItem = {
+      ...item.toObject(),
+      category: category?.name || "Unknown",
+    };
 
     return NextResponse.json(
-      { success: true, data: item },
+      { success: true, data: formattedItem },
       { status: 201 }
     )
   } catch (error) {

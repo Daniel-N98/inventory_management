@@ -16,6 +16,7 @@ import { InventoryItem } from "@/types/inventory"
 import CategoriesDropdown from "../category/categoriesDropdown"
 import { useRef } from "react"
 import { postInventoryItem } from "@/lib/api/inventory.api"
+import toast from "react-hot-toast"
 
 interface InventoryItemDialogProps {
   setInventoryItems: React.Dispatch<React.SetStateAction<InventoryItem[]>>
@@ -35,6 +36,10 @@ export function InventoryItemsDialog({ setInventoryItems }: InventoryItemDialogP
     const category = formData.get("category") as string;
 
     console.log(name, quantity, category);
+    if (!name || !category) {
+      toast.error("Invalid form submission. - Missing fields.");
+      return;
+    }
 
     const resultItem = await postInventoryItem({ name, quantity, category });
 
@@ -66,7 +71,7 @@ export function InventoryItemsDialog({ setInventoryItems }: InventoryItemDialogP
             </Field>
             <Field>
               <Label htmlFor="quantity">Quantity</Label>
-              <Input id="quantity" name="quantity" type="number" />
+              <Input id="quantity" name="quantity" type="number" defaultValue={0} />
             </Field>
             <Field>
               <Label>Category</Label>
