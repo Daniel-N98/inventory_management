@@ -4,7 +4,9 @@ import Roles from "@/models/Roles";
 import User from "@/models/User";
 import { Role } from "@/types/role";
 import { UserType } from "@/types/user"
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server"
+import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function GET() {
   await dbConnect();
@@ -39,6 +41,12 @@ export async function PATCH(request: Request) {
 
   try {
     const body: { _id: string; role: string } = await request.json();
+    const session = await getServerSession(authOptions);
+    if (session?.user.id === body._id) {
+      return NextResponse.json(
+      { success: false, error: "You cannot edit your own role." }
+    ); 
+    }
     const roleFound = await Roles.findOne({ name: body.role }).lean();
     
     const auth = await requireAuth(body.role); // User cannot update a user's role beyond their current role.
