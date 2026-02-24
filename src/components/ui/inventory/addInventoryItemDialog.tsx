@@ -35,7 +35,6 @@ export function InventoryItemsDialog({ setInventoryItems }: InventoryItemDialogP
     const quantity = quantityRaw !== null ? Number(quantityRaw) : 0;
     const category = formData.get("category") as string;
 
-    console.log(name, quantity, category);
     if (!name || !category) {
       toast.error("Invalid form submission. - Missing fields.");
       return;
