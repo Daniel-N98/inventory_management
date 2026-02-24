@@ -3,6 +3,7 @@ import Categories from '@/models/Categories';
 import InventoryItems from '@/models/InventoryItems';
 import { CategoriesType } from '@/types/category';
 import { NextResponse } from 'next/server'
+import { requireAuth } from '@/lib/requireAuth';
 
 export async function GET() {
   await dbConnect()
@@ -29,7 +30,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
   await dbConnect()
-  // Check should be done to ensure the User is able to create Categories.
+  // Check user authentication
+  const auth = await requireAuth("Admin");
+  if (!(auth && "user" in auth)) return auth as NextResponse;
+
   try {
     const body = await request.json();
     const item = await Categories.create(body);

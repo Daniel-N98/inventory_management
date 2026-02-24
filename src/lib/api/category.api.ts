@@ -15,7 +15,11 @@ export async function fetchCategories(): Promise<CategoriesType[]> {
 
 export async function postCategory(name: string): Promise<CategoriesType | null> {
   try {
-    const { data }: ServerResponse<CategoriesType> = await apiClient.post("/categories", { name });
+    const { data, error }: ServerResponse<CategoriesType> = await apiClient.post("/categories", { name });
+    if (error) {
+      toast.error(error);
+      return null;
+    }
     return data;
   } catch (error) {
     toast.error("An error has occurred.");
