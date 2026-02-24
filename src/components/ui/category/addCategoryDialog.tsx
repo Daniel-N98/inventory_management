@@ -30,12 +30,7 @@ export function CategoryDialog({ setCategories }: CategoryDialogProps) {
     const categoryResponse: CategoriesType | null = await postCategory(name);
     if (categoryResponse === null) return;
 
-    const newCategory: CategoriesType = {
-      _id: categoryResponse._id,
-      name: categoryResponse.name,
-    }
-
-    setCategories((prev: CategoriesType[]) => [...prev, newCategory])
+    setCategories((prev: CategoriesType[]) => [...prev, categoryResponse])
   }
 
   return (
