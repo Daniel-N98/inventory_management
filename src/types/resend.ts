@@ -9,4 +9,5 @@ export type ResendEmail = {
 export type ResendVerificationEmail = {
   to: string;
   name: string;
+  verificationLink: string;
 }

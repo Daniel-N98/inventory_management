@@ -9,12 +9,14 @@ if (!RESEND_API_KEY) {
 const resendClient = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendResendEmail({ to, subject, content, html, replyTo }: ResendEmail) {
-  const { data, error } = await resendClient.emails.send({ from: "digipregame@danielmails.com", to, subject, text: content, html });
+  const { data, error } = await resendClient.emails.send({ from: "InvManager@danielmails.com", to, subject, text: content, html, replyTo: "NoReply@danielmails.com" });
 
   if (error) {
     console.error("Could not send email:", error.message);
     return;
   }
+  console.log("Email sent to: ", to);
+  
   console.log(data);
   return data;
 }

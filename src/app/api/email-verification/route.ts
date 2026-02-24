@@ -6,15 +6,15 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { to, name }: ResendVerificationEmail = body;
-
-    const html = getVerificationEmailHTML(name, "https://localhost:3000/verify?token=abcdefg")
-    const subject = "Verify your email.";
-    const content = "Please verify your email by clicking this link: https://localhost:3000/verify?token=abcdefg";
-    const replyTo = "noReply@danielmails.com";
+    const { to, name, verificationLink }: ResendVerificationEmail = body;
+    
+    const html = getVerificationEmailHTML(name, verificationLink).trim();
+    const subject = "Verify your email.".trim();
+    const content = `Please verify your email by clicking this link: ${verificationLink}`.trim();
+    const replyTo = "no_reply@danielmails.com".trim();
 
     const email: ResendEmail = { to, html, subject, content, replyTo };
-
+    
     const data = await sendResendEmail(email);
     return NextResponse.json(
       { success: true, data },

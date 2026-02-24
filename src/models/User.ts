@@ -8,6 +8,14 @@ const UserSchema = new mongoose.Schema({
     ref: "Roles",
     required: true,
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: false,
+  },
   superUser: Boolean,
   password: String,
 }, { timestamps: true });
