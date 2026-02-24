@@ -23,11 +23,15 @@ export default function Settings() {
       setProfileData();
 
       function setProfileData() {
-        if (session === null) return;
-        setProfile({ name: session.user.name!, email: session.user.email! });
+        if (status === "authenticated" && session?.user) {
+          setProfile({
+            name: session.user.name ?? "",
+            email: session.user.email ?? "",
+          });
+        }
       }
     }
-  }, [status, router]);
+  }, [status, router, session]);
 
 
   function handleProfileChange(e: React.ChangeEvent<HTMLInputElement>) {
