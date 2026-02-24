@@ -45,6 +45,7 @@ export async function POST(req: NextRequest) {
     name,
     email,
     password: hashedPassword,
+    superUser: !existing, // Super user is for the first signed up user. Allows complete permissions over everything.
     role: roleToSet._id, // default role
   });
 
