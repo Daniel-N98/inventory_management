@@ -51,3 +51,16 @@ export async function deleteUserById(userId: string): Promise<UserType | null> {
     return null;
   }
 }
+
+export async function postUser(name: string, email: string, password: string): Promise<UserType | string> {
+  try {
+    const {data, error}: ServerResponse<UserType> = await apiClient.post("/register", {name, email, password});
+    if (error) {
+      return error;
+    }
+    return data;
+  } catch (error) {
+    toast.error("An error has occurred.");
+    return "Unknown error.";
+  }
+}
