@@ -70,3 +70,30 @@ export async function PATCH(request: Request) {
     )
   }
 }
+
+export async function DELETE(request: Request) {
+  await dbConnect()
+
+  try {
+    const { _id }: { _id: string } = await request.json()
+
+    const deleted = await User.findByIdAndDelete(_id)
+
+    if (!deleted) {
+      return NextResponse.json(
+        { success: false, message: 'User not found' },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json(
+      { success: true, data: { _id } },
+      { status: 200 }
+    )
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error },
+      { status: 400 }
+    )
+  }
+}

@@ -33,3 +33,13 @@ export async function updateUserRole(_id: string, role: string): Promise<UserTyp
     return null;
   }
 }
+
+export async function deleteUserById(userId: string): Promise<UserType | null> {
+  try {
+    const { data }: ServerResponse<UserType> = await apiClient.delete("/users", { data: { _id: userId } });
+    return data;
+  } catch (error) {
+    toast.error("An error has occurred.");
+    return null;
+  }
+}

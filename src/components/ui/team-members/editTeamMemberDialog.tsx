@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label"
 import { Pencil, Trash } from "lucide-react";
 import { useRef } from "react"
 import { UserType } from "@/types/user"
-import { updateUserRole } from "@/lib/api/users.api"
+import { deleteUserById, updateUserRole } from "@/lib/api/users.api"
 import { Role } from "@/types/role"
 import RolesDropdown from "./rolesDropdown"
 
@@ -33,7 +33,7 @@ export function EditTeamMemberDialog({ user, setUsers }: EditUserProps) {
     const formData = new FormData(event.currentTarget)
     let role = formData.get("role") as string;
     if (role.length === 0) role = user.role;
-    
+
     try {
       const userResponse: UserType | null = await updateUserRole(user._id, role);
 
@@ -45,18 +45,18 @@ export function EditTeamMemberDialog({ user, setUsers }: EditUserProps) {
     }
   }
 
-  // async function deleteInventoryItem() {
-  //   try {
-  //     const inventoryItemRes: InventoryItem | null = await deleteInventoryItemById(inventoryItem._id);
-  //     if (!inventoryItemRes) return;
+  async function deleteUser() {
+    try {
+      const userRes: UserType | null = await deleteUserById(user._id);
+      if (!userRes) return;
 
-  //     setInventoryItems((prev: InventoryItem[]) =>
-  //       prev.filter((inventoryItem: InventoryItem) => inventoryItem._id !== inventoryItemRes._id)
-  //     )
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+      setUsers((prev: UserType[]) =>
+        prev.filter((user: UserType) => user._id !== userRes._id)
+      )
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <Dialog>
@@ -94,7 +94,7 @@ export function EditTeamMemberDialog({ user, setUsers }: EditUserProps) {
           </FieldGroup>
           <DialogFooter className="flex items-center w-full">
             <DialogClose asChild>
-              {/* <Button variant="destructive" className="hover:text-white" onClick={() => deleteInventoryItem()}><Trash /></Button> */}
+              <Button variant="destructive" className="hover:text-white" onClick={() => deleteUser()}><Trash /></Button>
             </DialogClose>
 
             <div className="ml-auto flex gap-2">
