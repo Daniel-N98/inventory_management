@@ -2,9 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { EditCategoryDialog } from "./editCategoryDialog";
 import { CategoriesType } from "@/types/category";
+import LoadingIcon from "../loadingIcon";
 
 interface CategoryTableProps {
-  filtered: CategoriesType[],
+  filtered: CategoriesType[] | null,
   setCategories: React.Dispatch<React.SetStateAction<CategoriesType[]>>
 }
 export default function CategoriesTable({ filtered, setCategories }: CategoryTableProps) {
@@ -27,7 +28,7 @@ export default function CategoriesTable({ filtered, setCategories }: CategoryTab
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filtered &&
+                {filtered ?
                   filtered.map((item, idx) => (
                     <TableRow
                       key={item._id}
@@ -42,7 +43,7 @@ export default function CategoriesTable({ filtered, setCategories }: CategoryTab
                         <EditCategoryDialog category={item} setCategories={setCategories} />
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )) : <TableRow><TableCell><LoadingIcon /></TableCell></TableRow>}
               </TableBody>
             </Table>
           </div>

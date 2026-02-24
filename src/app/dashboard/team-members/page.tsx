@@ -9,9 +9,10 @@ import { useEffect, useState } from "react";
 
 export default function TeamMembers() {
   const [users, setUsers] = useState<UserType[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [search, setSearch] = useState('');
 
-  const filtered = users.filter((user: UserType) =>
+  const filtered = loading ? null : users.filter((user: UserType) =>
     user.name.toLowerCase().includes(search.toLowerCase()) ||
     user.email.toLowerCase().includes(search.toLowerCase()) ||
     user.role.toLowerCase().includes(search.toLowerCase())
@@ -21,6 +22,7 @@ export default function TeamMembers() {
     async function loadUsers() {
       const usersRes: UserType[] = await fetchUsers();
       setUsers(usersRes);
+      setLoading(false);
     }
     loadUsers();
   }, []);

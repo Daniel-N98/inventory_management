@@ -2,9 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { InventoryItem } from "@/types/inventory";
 import { EditInventoryDialog } from "./editInventoryItemDialog";
+import LoadingIcon from "../loadingIcon";
 
 interface InventoryTableProps {
-  filtered: InventoryItem[],
+  filtered: InventoryItem[] | null,
   setInventoryItems: React.Dispatch<React.SetStateAction<InventoryItem[]>>
 }
 
@@ -29,7 +30,7 @@ export default function InventoryTable({ filtered, setInventoryItems }: Inventor
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filtered &&
+                {filtered ?
                   filtered.map((item: InventoryItem, idx: number) => (
                     <TableRow
                       key={item._id}
@@ -46,7 +47,7 @@ export default function InventoryTable({ filtered, setInventoryItems }: Inventor
                         <EditInventoryDialog inventoryItem={item} setInventoryItems={setInventoryItems} />
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )) : <TableRow><TableCell><LoadingIcon /></TableCell></TableRow>}
               </TableBody>
             </Table>
           </div>

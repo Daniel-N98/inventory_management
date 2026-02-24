@@ -9,12 +9,15 @@ import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardData>({ users: [], inventoryItems: [], categories: [], roles: [] });
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function loadDashboardData() {
+      setLoading(true);
       const dashboardResponse: DashboardData | null = await fetchDashboardData();
       if (dashboardResponse === null) return;
       setDashboardData(dashboardResponse);
+      setLoading(false);
     }
     loadDashboardData();
   }, []);
@@ -32,7 +35,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stats */}
-      <Stats dashboardData={dashboardData} />
+      <Stats dashboardData={dashboardData} loading={loading}/>
 
       {/* Main sections */}
       <div className="grid gap-6 lg:grid-cols-2">

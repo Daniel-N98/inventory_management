@@ -9,9 +9,10 @@ import { useEffect, useState } from "react";
 
 export default function Inventory() {
   const [inventoryItems, setInventoryItems] = useState<InventoryItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [search, setSearch] = useState('');
 
-  const filtered = inventoryItems.filter((inventoryItem: InventoryItem) =>
+  const filtered = loading ? null : inventoryItems.filter((inventoryItem: InventoryItem) =>
     inventoryItem.name.toLowerCase().includes(search.toLowerCase()) ||
     inventoryItem.category.toLowerCase().includes(search.toLowerCase())
   );
@@ -20,6 +21,7 @@ export default function Inventory() {
     async function loadInventoryItems() {
       const inventoryItemsRes: InventoryItem[] = await fetchInventoryItems();
       setInventoryItems(inventoryItemsRes);
+      setLoading(false);
     }
     loadInventoryItems();
   }, []);
@@ -41,7 +43,7 @@ export default function Inventory() {
       </div>
 
       {/* Inventory Table */}
-      <InventoryTable filtered={filtered} setInventoryItems={setInventoryItems}/>
+      <InventoryTable filtered={filtered} setInventoryItems={setInventoryItems} />
     </main >
   )
 }
