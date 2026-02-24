@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const { name, email, role } = body;
 
     const invitationToken: string = crypto.randomBytes(32).toString("hex");
-    const invitationAcceptLink: string = `${process.env.NEXT_PUBLIC_APP_URL}/invited?token=${invitationToken}`;
+    const invitationAcceptLink: string = `${process.env.NEXT_PUBLIC_APP_URL}/login?token=${invitationToken}`;
 
     const result = await Invitation.create({ name, email, role, invitationToken, invitedBy: session?.user?.id });
     if (result) {

@@ -52,9 +52,9 @@ export async function deleteUserById(userId: string): Promise<UserType | null> {
   }
 }
 
-export async function postUser(name: string, email: string, password: string): Promise<UserType | string> {
+export async function postUser(name: string, email: string, password: string, token: string | null): Promise<UserType | string> {
   try {
-    const { data, error }: ServerResponse<UserType> = await apiClient.post("/register", { name, email, password });
+    const { data, error }: ServerResponse<UserType> = await apiClient.post("/register", { name, email, password, token });
     if (error) {
       return error;
     }
