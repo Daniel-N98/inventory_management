@@ -19,7 +19,7 @@ export default function VerifyEmail() {
     async function attemptVerification() {
       const verified: boolean = await verifyUserEmail(token!);
       if (verified) {
-        toast.success("Your email has been verified.");
+        toast.success("Your email has been verified. You can now login.");
         router.push("/dashboard");
       } else {
         toast.error("Could not verify email.");
