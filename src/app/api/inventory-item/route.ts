@@ -20,6 +20,8 @@ export async function GET() {
       category: (categories.find(
         (category: CategoriesType) => category._id.toString() === inventoryItem.category.toString()
       )?.name) || "Unknown",
+      createdAt: inventoryItem.createdAt,
+      updatedAt: inventoryItem.updatedAt
     }));
 
     return NextResponse.json(

@@ -5,6 +5,6 @@ const CategoriesSchema = new mongoose.Schema({
     type: String,
     required: true,
   }
-});
+}, { timestamps: true });
 
 export default mongoose.models.Categories || mongoose.model('Categories', CategoriesSchema);

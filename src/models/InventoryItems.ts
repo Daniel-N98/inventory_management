@@ -14,6 +14,6 @@ const InventoryItemsSchema = new mongoose.Schema({
     ref: 'Categories',
     required: true
   }
-});
+}, { timestamps: true });
 
 export default mongoose.models.Inventory_item || mongoose.model('Inventory_item', InventoryItemsSchema);

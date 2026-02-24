@@ -14,6 +14,8 @@ export async function GET() {
     const formatted: CategoriesType[] = categories.map(cat => ({
       _id: cat._id.toString(),
       name: cat.name,
+      createdAt: cat.createdAt,
+      updatedAt: cat.updatedAt
     }))
 
     return NextResponse.json(
