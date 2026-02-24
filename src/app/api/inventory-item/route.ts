@@ -1,4 +1,5 @@
 import dbConnect from '@/lib/mongodb'
+import { requireAuth } from '@/lib/requireAuth'
 import Categories from '@/models/Categories'
 import InventoryItems from '@/models/InventoryItems'
 import { CategoriesType } from '@/types/category'
@@ -35,7 +36,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
   await dbConnect()
-  // Check should be done to ensure the User is able to create InventoryItems.
+  // Check user authentication
+  const auth = await requireAuth("Admin");
+  if (!(auth && "user" in auth)) return auth as NextResponse;
+
   try {
     const body = await request.json();
     const item = await InventoryItems.create(body);
@@ -60,6 +64,9 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   await dbConnect()
+  // Check user authentication
+  const auth = await requireAuth("Admin");
+  if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {
     const body: { _id: string; name: string, quantity: number, category: string } = await request.json();
@@ -99,6 +106,9 @@ export async function PATCH(request: Request) {
 
 export async function DELETE(request: Request) {
   await dbConnect()
+  // Check user authentication
+  const auth = await requireAuth("Admin");
+  if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {
     const { _id }: { _id: string } = await request.json()

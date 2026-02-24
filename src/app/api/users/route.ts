@@ -1,4 +1,5 @@
 import dbConnect from "@/lib/mongodb"
+import { requireAuth } from "@/lib/requireAuth";
 import Roles from "@/models/Roles";
 import User from "@/models/User";
 import { Role } from "@/types/role";
@@ -32,6 +33,9 @@ export async function GET() {
 
 export async function PATCH(request: Request) {
   await dbConnect()
+  // Check user authentication
+  const auth = await requireAuth("Admin");
+  if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {
     const body: { _id: string; role: string } = await request.json();
@@ -73,6 +77,9 @@ export async function PATCH(request: Request) {
 
 export async function DELETE(request: Request) {
   await dbConnect()
+  // Check user authentication
+  const auth = await requireAuth("Admin");
+  if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {
     const { _id }: { _id: string } = await request.json()
