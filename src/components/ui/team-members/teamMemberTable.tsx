@@ -41,11 +41,11 @@ export default function TeamMemberTable({ filtered, setUsers }: TeamMemberTableP
                     <TableCell>{item.email}</TableCell>
                     <TableCell>{item.role}</TableCell>
                     {/* Only display edit symbol if this user is not the superUser. */}
-                    {!item.superUser &&
-                      <TableCell className="flex justify-center">
+                    <TableCell className="flex justify-center">
+                      {!item.superUser &&
                         <EditTeamMemberDialog user={item} setUsers={setUsers} />
-                      </TableCell>
-                    }
+                      }
+                    </TableCell>
                   </TableRow>
                 )) : <TableRow><TableCell><LoadingIcon /></TableCell></TableRow>}
             </TableBody>
