@@ -1,12 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { UserType } from "@/types/user";
-import { Pencil } from "lucide-react";
+import { EditTeamMemberDialog } from "./editTeamMemberDialog";
 
 interface TeamMemberTablePropd {
   filtered: UserType[],
+  setUsers: React.Dispatch<React.SetStateAction<UserType[]>>
 }
-export default function TeamMemberTable({ filtered }: TeamMemberTablePropd) {
+export default function TeamMemberTable({ filtered, setUsers }: TeamMemberTablePropd) {
 
   return (
     <Card className="bg-white dark:bg-zinc-800 w-full overflow-x-auto" >
@@ -39,7 +40,7 @@ export default function TeamMemberTable({ filtered }: TeamMemberTablePropd) {
                     <TableCell>{item.email}</TableCell>
                     <TableCell>{item.role}</TableCell>
                     <TableCell className="flex justify-center">
-                      <Pencil className="h-5 w-5 text-blue-600 hover:text-blue-700 cursor-pointer" />
+                      <EditTeamMemberDialog user={item} setUsers={setUsers} />
                     </TableCell>
                   </TableRow>
                 ))}
