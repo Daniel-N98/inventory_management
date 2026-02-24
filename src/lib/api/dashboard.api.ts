@@ -6,6 +6,7 @@ import { InventoryItem } from "@/types/inventory";
 import { UserType } from "@/types/user";
 import { Role } from "@/types/role";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 export async function fetchDashboardData(): Promise<DashboardData | null> {
   try {
@@ -22,6 +23,7 @@ export async function fetchDashboardData(): Promise<DashboardData | null> {
     }
     return dashboardData;
   } catch (error) {
+    if (axios.isCancel(error)) return null;
     toast.error("An error has occurred.");
     return null;
   }
