@@ -27,17 +27,16 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <Suspense fallback={<p>Could not load.</p>}>
-
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <Suspense>
           <div className="flex-1">
             <Toaster />
             <Providers>{children}</Providers>
           </div>
-        </body>
-      </Suspense>
+        </Suspense>
+      </body>
     </html>
   );
 }
