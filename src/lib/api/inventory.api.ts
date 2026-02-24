@@ -8,7 +8,7 @@ export async function fetchInventoryItems(): Promise<InventoryItem[]> {
     const { data }: ServerResponse<InventoryItem[]> = await apiClient.get("/inventory-item");
     return data;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return [];
   }
 }
@@ -23,7 +23,7 @@ export async function postInventoryItem({ name, quantity, category }: CreatedInv
     }
     return data;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return null;
   }
 }
@@ -37,7 +37,7 @@ export async function updateInventoryItemById(_id: string, name: string, quantit
     }
     return data;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return null;
   }
 }
@@ -51,7 +51,7 @@ export async function deleteInventoryItemById(inventoryItemId: string): Promise<
     }
     return data;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return null;
   }
 }

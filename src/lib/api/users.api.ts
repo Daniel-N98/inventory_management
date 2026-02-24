@@ -9,7 +9,7 @@ export async function fetchRoles(): Promise<Role[]> {
     const { data }: ServerResponse<Role[]> = await apiClient.get("/roles");
     return data;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return [];
   }
 }
@@ -19,7 +19,7 @@ export async function fetchUsers(): Promise<UserType[]> {
     const { data }: ServerResponse<UserType[]> = await apiClient.get("/users");
     return data;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return [];
   }
 }
@@ -33,7 +33,7 @@ export async function updateUserRole(_id: string, role: string): Promise<UserTyp
     }
     return data;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return null;
   }
 }
@@ -47,7 +47,7 @@ export async function deleteUserById(userId: string): Promise<UserType | null> {
     }
     return data;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return null;
   }
 }
@@ -60,7 +60,7 @@ export async function postUser(name: string, email: string, password: string): P
     }
     return data;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return "Unknown error.";
   }
 }

@@ -8,7 +8,7 @@ export async function fetchCategories(): Promise<CategoriesType[]> {
     const { data }: ServerResponse<CategoriesType[]> = await apiClient.get("/categories");
     return data;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return [];
   }
 }
@@ -22,7 +22,7 @@ export async function postCategory(name: string): Promise<CategoriesType | null>
     }
     return data;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return null;
   }
 }
@@ -36,7 +36,7 @@ export async function updateCategoryById(_id: string, name: string): Promise<Cat
     }
     return data;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return null;
   }
 }
@@ -50,7 +50,7 @@ export async function deleteCategoryById(category_id: string): Promise<Categorie
     }
     return data;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return null;
   }
 }

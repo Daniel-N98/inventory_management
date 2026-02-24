@@ -1,6 +1,5 @@
 import { DashboardData } from "@/types/dashboard";
 import apiClient from "../api";
-import toast from "react-hot-toast";
 
 export async function fetchDashboardData(): Promise<DashboardData | null> {
   try {
@@ -19,7 +18,7 @@ export async function fetchDashboardData(): Promise<DashboardData | null> {
     }
     return dashboardData;
   } catch (error) {
-    toast.error("An error has occurred.");
+    console.log("An error has occurred.");
     return null;
   }
 }
