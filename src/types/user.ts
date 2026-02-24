@@ -5,6 +5,7 @@ export type UserType = {
   role: string;
   superUser: boolean;
   verified: boolean;
+  verificationToken?: string;
   createdAt: Date;
   updatedAt: Date;
 }

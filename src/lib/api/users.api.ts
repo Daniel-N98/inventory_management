@@ -54,7 +54,7 @@ export async function deleteUserById(userId: string): Promise<UserType | null> {
 
 export async function postUser(name: string, email: string, password: string): Promise<UserType | string> {
   try {
-    const {data, error}: ServerResponse<UserType> = await apiClient.post("/register", {name, email, password});
+    const { data, error }: ServerResponse<UserType> = await apiClient.post("/register", { name, email, password });
     if (error) {
       return error;
     }
@@ -62,5 +62,27 @@ export async function postUser(name: string, email: string, password: string): P
   } catch (error) {
     console.log("An error has occurred.");
     return "Unknown error.";
+  }
+}
+
+export async function verifyUserEmail(token: string): Promise<boolean> {
+  try {
+    const {data} = await apiClient.get(`/users/verify-email?token=${token}`);
+    return data;
+  } catch (error) {
+    console.log("An error has occurred.");
+    return false;
+
+  }
+}
+
+export async function checkEmailVerification(email: string): Promise<boolean> {
+  try {
+    const {data} = await apiClient.get(`users/verify-login?email=${email}`);
+    return data;
+  } catch (error) {
+    console.log("An error has occurred.");
+    return false;
+    
   }
 }

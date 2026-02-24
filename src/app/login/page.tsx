@@ -8,8 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Field, FieldLabel, FieldDescription } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { postUser } from "@/lib/api/users.api";
+import { checkEmailVerification, postUser } from "@/lib/api/users.api";
 import { UserType } from "@/types/user";
+import toast from "react-hot-toast";
 
 export default function AuthPage() {
   const router = useRouter();
@@ -34,6 +35,14 @@ export default function AuthPage() {
     setLoading(true);
 
     const { email, password } = loginData;
+    const emailVerified: boolean = await checkEmailVerification(email);
+    if (!emailVerified) {
+      setError("Your email address has not been verified.");
+      toast.error("Please verify your email before logging in.");
+      setLoading(false);
+      return;
+    }
+
     const loginRes = await signIn("credentials", { redirect: false, email, password });
 
     setLoading(false);
@@ -61,16 +70,17 @@ export default function AuthPage() {
         setLoading(false);
         return;
       }
-      // Auto-login after registration
-      const loginRes = await signIn("credentials", { redirect: false, email, password });
+      // Auto-login after registration - Don't auto login - email verification required first.
+      // const loginRes = await signIn("credentials", { redirect: false, email, password });
       setLoading(false);
 
-      if (loginRes?.error) {
-        setError("Registered but login failed: " + loginRes.error);
-        return;
-      }
+      // if (loginRes?.error) {
+      //   setError("Registered but login failed: " + loginRes.error);
+      //   return;
+      // }
 
-      router.push("/dashboard");
+      toast.success("Account created - Please verify your email.");
+      router.push("/login");
     } catch (error) {
       setError("Unexpected error during registration");
       setLoading(false);
