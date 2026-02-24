@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { UserType } from "@/types/user";
 import { EditTeamMemberDialog } from "./editTeamMemberDialog";
 import LoadingIcon from "../loadingIcon";
+import { Check, X } from "lucide-react";
 
 interface TeamMemberTablePropd {
   filtered: UserType[] | null,
@@ -25,6 +26,7 @@ export default function TeamMemberTable({ filtered, setUsers }: TeamMemberTableP
                 <TableHead className="w-36">Name</TableHead>
                 <TableHead className="w-60">Email</TableHead>
                 <TableHead className="w-48">Role</TableHead>
+                <TableHead className="w-48">Verified</TableHead>
                 <TableHead className="w-16 text-center">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -40,6 +42,7 @@ export default function TeamMemberTable({ filtered, setUsers }: TeamMemberTableP
                     <TableCell>{item.name + " " + (item.superUser === true ? "*" : "")}</TableCell>
                     <TableCell>{item.email}</TableCell>
                     <TableCell>{item.role}</TableCell>
+                    <TableCell>{item.verified === true ? <Check className="text-green-500"/> : <X className="text-red-500"/>}</TableCell>
                     {/* Only display edit symbol if this user is not the superUser. */}
                     <TableCell className="flex justify-center">
                       {!item.superUser &&

@@ -19,6 +19,7 @@ export async function GET() {
       name: user.name,
       email: user.email,
       role: roles.find((role: Role) => role._id.toString() === user.role.toString()).name, // Map role._id to role name
+      verified: user.verified,
       superUser: user.superUser,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,

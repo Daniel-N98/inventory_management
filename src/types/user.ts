@@ -4,6 +4,8 @@ export type UserType = {
   email: string;
   role: string;
   superUser: boolean;
-  createdAt: Date,
-  updatedAt: Date,
+  verified: boolean;
+  verificationToken?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
