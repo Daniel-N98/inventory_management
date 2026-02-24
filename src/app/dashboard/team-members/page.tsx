@@ -25,18 +25,11 @@ export default function TeamMembers() {
     loadUsers();
   }, []);
 
-  async function updateUser() {
-    const userRes: UserType | null = await updateUserRole("699bcf619f28888f577b9fa0", "Admin");
-    if (userRes === null) return;
-    console.log(userRes);
-    setUsers((currentUsers: UserType[]) => currentUsers.map((user: UserType) => user._id === userRes._id ? userRes : user));
-  }
-
   return (
     <main className="flex-1 p-4 md:p-8 overflow-x-auto" >
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4">
         <h1 className="text-2xl md:text-3xl font-semibold text-zinc-900 dark:text-zinc-50">Team Members</h1>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => updateUser()}>Add Member</Button>
+        <Button className="bg-blue-600 hover:bg-blue-700 text-white">Add Member</Button>
       </div>
 
       {/* Search / Filter */}
