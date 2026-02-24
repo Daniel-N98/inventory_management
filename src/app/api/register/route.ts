@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
 
   // Ensure at least one role exists
   if (roles.length === 0) {
-    roleToSet = await Roles.create({ name: "default", permission_level: 0 });
+    roleToSet = await Roles.create({ name: "Default", permission_level: 0 });
     roles = [roleToSet];
   }
 
@@ -45,6 +45,10 @@ export async function POST(req: NextRequest) {
   const hashedPassword = await bcrypt.hash(password, 12);
   const verificationToken: string = crypto.randomBytes(32).toString("hex");
   const verificationLink: string = `${process.env.NEXT_PUBLIC_APP_URL}/verify?token=${verificationToken}`;
+  let superRole;
+  try {
+    superRole = await Roles.create({ name: "Super", permission_level: 100 }); // Create super role if not already exists.
+  } catch (error) { };
 
   const result = await User.create({
     name,
@@ -53,7 +57,7 @@ export async function POST(req: NextRequest) {
     verified: false,
     verificationToken,
     superUser: !existingUsers, // Super user is for the first signed up user. Allows complete permissions over everything.
-    role: roleToSet._id, // default role
+    role: (!existingUsers && superRole) ? superRole._id : roleToSet._id, // SuperUser role if no users, otherwise default.
   });
   await apiClient.post(`${process.env.NEXT_PUBLIC_APP_URL}/api/email-verification`, { to: email, name, verificationLink });
   return NextResponse.json({ message: "User registered", id: result.insertedId });
