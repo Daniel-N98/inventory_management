@@ -34,12 +34,15 @@ export async function GET() {
 export async function PATCH(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth = await requireAuth("Admin");
+  const auth = await requireAuth("Editor");
   if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {
     const body: { _id: string; role: string } = await request.json();
     const roleFound = await Roles.findOne({ name: body.role }).lean();
+    
+    const auth = await requireAuth(body.role); // User cannot update a user's role beyond their current role.
+    if (!(auth && "user" in auth)) return auth as NextResponse;
 
     const updated = await User.findByIdAndUpdate(
       body._id,
