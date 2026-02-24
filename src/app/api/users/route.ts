@@ -11,7 +11,6 @@ export async function GET() {
   try {
     const users = await User.find({}).lean();
     const roles = await Roles.find({}).lean();
-    
     const formatted: UserType[] = users.map((user: UserType) => ({
       _id: user._id.toString(),
       name: user.name,
@@ -28,5 +27,46 @@ export async function GET() {
       { success: false, error },
       { status: 500 }
     );
+  }
+}
+
+export async function PATCH(request: Request) {
+  await dbConnect()
+
+  try {
+    const body: { _id: string; role: string } = await request.json();
+    const roleFound = await Roles.findOne({ name: body.role }).lean();
+
+    const updated = await User.findByIdAndUpdate(
+      body._id,
+      { role: roleFound._id },
+      { returnDocument: 'after' }
+    )
+
+    if (!updated) {
+      return NextResponse.json(
+        { success: false, message: 'User not found' },
+        { status: 404 }
+      )
+    }
+    updated.role = roleFound.name;
+
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          _id: updated._id.toString(),
+          name: updated.name,
+          email: updated.email,
+          role: roleFound.name
+        }
+      },
+      { status: 200 }
+    )
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error },
+      { status: 400 }
+    )
   }
 }
