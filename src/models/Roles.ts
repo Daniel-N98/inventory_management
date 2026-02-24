@@ -8,8 +8,7 @@ const RolesSchema = new mongoose.Schema({
   },
   permission_level: {
     type: Number,
-    required: true,
-    unique: true
+    required: true
   }
 });
 
