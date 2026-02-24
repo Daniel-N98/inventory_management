@@ -35,7 +35,11 @@ export async function updateCategoryById(_id: string, name: string): Promise<Cat
 
 export async function deleteCategoryById(category_id: string): Promise<CategoriesType | null> {
   try {
-    const { data }: ServerResponse<CategoriesType> = await apiClient.delete("/categories", { data: { _id: category_id } });
+    const { data, error }: ServerResponse<CategoriesType> = await apiClient.delete("/categories", { data: { _id: category_id } });
+    if (error) {
+      toast.error(error);
+      return null;
+    }
     return data;
   } catch (error) {
     toast.error("An error has occurred.");

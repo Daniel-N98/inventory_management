@@ -1,5 +1,6 @@
 import dbConnect from '@/lib/mongodb'
 import Categories from '@/models/Categories';
+import InventoryItems from '@/models/InventoryItems';
 import { CategoriesType } from '@/types/category';
 import { NextResponse } from 'next/server'
 
@@ -87,8 +88,15 @@ export async function DELETE(request: Request) {
 
   try {
     const { _id }: { _id: string } = await request.json()
+    const existingInventoryItems = await InventoryItems.find({ category: _id }).lean();
+    if (existingInventoryItems.length > 0) {
+      return NextResponse.json(
+        { success: false, error: "Inventory Items exist with this category. Remove them first." },
+        { status: 200 }
+      );
+    }
+    const deleted = await Categories.findByIdAndDelete(_id);
 
-    const deleted = await Categories.findByIdAndDelete(_id)
 
     if (!deleted) {
       return NextResponse.json(
