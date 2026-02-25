@@ -38,6 +38,34 @@ export async function updateUserRole(_id: string, role: string): Promise<UserTyp
   }
 }
 
+export async function updateUserName(_id: string, name: string): Promise<UserType | null> {
+  try {
+    const { data, error }: ServerResponse<UserType> = await apiClient.patch("/users/profile", { _id, name });
+    if (error) {
+      toast.error(error);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    console.log("An error has occurred.");
+    return null;
+  }
+}
+
+export async function updateUserPassword(_id: string, current: string, newPassword: string, confirm: string): Promise<UserType | null> {
+  try {
+    const { data, error }: ServerResponse<UserType> = await apiClient.patch("/users/profile", { _id, current, newPassword, confirm });
+    if (error) {
+      toast.error(error);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    console.log("An error has occurred.");
+    return null;
+  }
+}
+
 export async function deleteUserById(userId: string): Promise<UserType | null> {
   try {
     const { data, error }: ServerResponse<UserType> = await apiClient.delete("/users", { data: { _id: userId } });
