@@ -48,6 +48,11 @@ export default function Settings() {
     const formData = new FormData(event.currentTarget)
     const name = formData.get("name") as string
 
+    if (name === session.user.name) {
+      toast.error("You have not changed your name.");
+      setLoading(false);
+      return;
+    }
     try {
       const userRes = await updateUserName(session.user.id, name);
       setLoading(false);
