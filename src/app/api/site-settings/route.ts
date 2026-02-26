@@ -2,6 +2,7 @@ import dbConnect from "@/lib/mongodb";
 import { requireAuth } from "@/lib/requireAuth";
 import Roles from "@/models/Roles";
 import SiteSettings from "@/models/SiteSettings";
+import { Role } from "@/types/role";
 import { FormattedSiteSettings } from "@/types/site-settings";
 import { NextResponse } from "next/server";
 
@@ -19,7 +20,6 @@ export async function GET() {
   try {
     const siteSettings = await SiteSettings.find({}).lean();
     const roles = await Roles.find({}).lean();
-    
     const formatted: FormattedSiteSettings[] = siteSettings.reduce((acc, siteSetting) => {
       const name = SITE_SETTINGS_NAME_MAPPINGS[siteSetting.name];
       acc[name] = {
@@ -29,7 +29,6 @@ export async function GET() {
       };
       return acc;
     }, {} as Record<string, { editRole: string | null, createRole: string | null, inviteRole: string | null }>);
-    
     return NextResponse.json(
       { success: true, data: formatted },
       { status: 200 }
@@ -45,37 +44,53 @@ export async function GET() {
 export async function PATCH(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth = await requireAuth("site-settings", "editRole");
+  const auth: any = await requireAuth("site-settings", "editRole");
   if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {
     const body: { type: string, editRole: string, createRole: string, inviteRole?: string } = await request.json();
 
     const siteSettings = await SiteSettings.findOne({ name: body.type });
+    const rolesFound = await Roles.find({}).lean();
 
     let editSuccess = false;
     let createSuccess = false;
     let inviteSuccess = false;
 
     if (body.editRole && body.editRole.length > 0) {
-      const editRoleFound = await Roles.findOne({ name: body.editRole });
-      if (editRoleFound) {
-        siteSettings.editRole = editRoleFound._id;
-        editSuccess = true;
+      const requiredRole = rolesFound.find((role: Role) => role._id.toString() === siteSettings.editRole.toString());
+      const authResult = await requireAuth("site-settings", "editRole", requiredRole.name, requiredRole.permission_level, true);
+      
+      if (authResult) {
+        const editRoleFound = await Roles.findOne({ name: body.editRole });
+        if (editRoleFound) {
+          siteSettings.editRole = editRoleFound._id;
+          editSuccess = true;
+        }
       }
     }
     if (body.createRole && body.createRole.length > 0) {
-      const createRoleFound = await Roles.findOne({ name: body.createRole });
-      if (createRoleFound) {
-        siteSettings.createRole = createRoleFound._id;
-        createSuccess = true;
+      const requiredRole = rolesFound.find((role: Role) => role._id.toString() === siteSettings.createRole.toString());
+      const authResult = await requireAuth("site-settings", "createRole", requiredRole.name, requiredRole.permission_level, true);
+
+      if (authResult) {
+        const createRoleFound = await Roles.findOne({ name: body.createRole });
+        if (createRoleFound) {
+          siteSettings.createRole = createRoleFound._id;
+          createSuccess = true;
+        }
       }
     }
+
     if (body.inviteRole && body.inviteRole.length > 0) {
-      const inviteRoleFound = await Roles.findOne({ name: body.inviteRole });
-      if (inviteRoleFound) {
-        siteSettings.inviteRole = inviteRoleFound._id;
-        inviteSuccess = true;
+      const requiredRole = rolesFound.find((role: Role) => role._id.toString() === siteSettings.inviteRole.toString());
+      const authResult = await requireAuth("site-settings", "inviteRole", requiredRole.name, requiredRole.permission_level, true);
+      if (authResult) {
+        const inviteRoleFound = await Roles.findOne({ name: body.inviteRole });
+        if (inviteRoleFound) {
+          siteSettings.inviteRole = inviteRoleFound._id;
+          inviteSuccess = true;
+        }
       }
     }
     await siteSettings.save();

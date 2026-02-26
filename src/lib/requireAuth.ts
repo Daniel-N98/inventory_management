@@ -10,12 +10,9 @@ export async function requireAuth(
   type: string,
   forceRoleRequired?: string,
   forceMinPermissionLevel?: number,
+  returnBoolean?: boolean,
 ) {
   const session = await getServerSession(authOptions);
-  /*
-    - Get the corresponding site setting role
-    - Compare
-  */
 
   if (!session) {
     return NextResponse.json(
@@ -32,7 +29,7 @@ export async function requireAuth(
   if (user.superUser) return session;
   const userRole = await Roles.findOne({ _id: user.role }).lean();
   const hasForceRequiredRole: boolean = forceRoleRequired && forceRoleRequired.length > 0 ? true : false;
-  
+
   const siteSettingRow = hasForceRequiredRole ? null : await SiteSettings.findOne({ name: siteSetting });
   let role;
   if (siteSettingRow) {
@@ -40,12 +37,12 @@ export async function requireAuth(
   } else {
     role = await Roles.findOne({ name: forceRoleRequired });
   }
-
+  
   if (!user || (role && userRole.permission_level < ((forceMinPermissionLevel && !hasForceRequiredRole) ? forceMinPermissionLevel : role.permission_level))) {
-    return NextResponse.json(
+    return (returnBoolean && returnBoolean === true) ? false : NextResponse.json(
       { success: false, error: "No access." }
     );
   }
 
-  return session;
+  return (returnBoolean && returnBoolean === true) ? true : session;
 }
