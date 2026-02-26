@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 
     // Check user authentication
     const auth = await requireAuth("roles", "createRole", "", permission_level);
-    if (!(auth && "user" in auth)) return auth as NextResponse;
+    if (typeof auth !== "boolean" && !(auth && "user" in auth)) return auth as NextResponse;
 
     const role = await Roles.create({ name, permission_level });
 
@@ -62,10 +62,10 @@ export async function PATCH(request: Request) {
 
   try {
     const body: { _id: string; name: string, permission_level: number } = await request.json();
-    
+
     // Check user authentication
     const auth = await requireAuth("roles", "editRole", "", body.permission_level);
-    if (!(auth && "user" in auth)) return auth as NextResponse;
+    if (typeof auth !== "boolean" && !(auth && "user" in auth)) return auth as NextResponse;
 
     const updated = await Roles.findByIdAndUpdate(
       body._id,

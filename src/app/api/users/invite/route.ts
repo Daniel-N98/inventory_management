@@ -12,7 +12,7 @@ export async function POST(request: Request) {
   await dbConnect()
   // Check user authentication
   const auth = await requireAuth("team-members", "inviteRole");
-  if (!(auth && "user" in auth)) return auth as NextResponse;
+  if (typeof auth !== "boolean" && !(auth && "user" in auth)) return auth as NextResponse;
 
   try {
     const session = await getServerSession(authOptions);

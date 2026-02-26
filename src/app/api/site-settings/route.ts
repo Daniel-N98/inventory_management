@@ -44,8 +44,8 @@ export async function GET() {
 export async function PATCH(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth: any = await requireAuth("site-settings", "editRole");
-  if (!(auth && "user" in auth)) return auth as NextResponse;
+  const auth = await requireAuth("site-settings", "editRole");
+  if (typeof auth !== "boolean" && !(auth && "user" in auth)) return auth as NextResponse;
 
   try {
     const body: { type: string, editRole: string, createRole: string, inviteRole?: string } = await request.json();
@@ -60,7 +60,7 @@ export async function PATCH(request: Request) {
     if (body.editRole && body.editRole.length > 0) {
       const requiredRole = rolesFound.find((role: Role) => role._id.toString() === siteSettings.editRole.toString());
       const authResult = await requireAuth("site-settings", "editRole", requiredRole.name, requiredRole.permission_level, true);
-      
+
       if (authResult) {
         const editRoleFound = await Roles.findOne({ name: body.editRole });
         if (editRoleFound) {
