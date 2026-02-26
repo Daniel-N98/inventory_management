@@ -6,6 +6,7 @@ import Roles from "@/models/Roles";
 import crypto from "crypto";
 import apiClient from "@/lib/api";
 import Invitation from "@/models/Invitation";
+import SiteSettings from "@/models/SiteSettings";
 
 export async function POST(req: NextRequest) {
   const { name, email, password, token } = await req.json();
@@ -49,6 +50,28 @@ export async function POST(req: NextRequest) {
   let superRole;
   try {
     superRole = await Roles.create({ name: "Super", permission_level: 100 }); // Create super role if not already exists.
+    await SiteSettings.create(
+      {
+        name: "site-settings",
+        role: superRole._id
+      },
+      {
+        name: "categories",
+        role: superRole._id
+      },
+      {
+        name: "inventory-items",
+        role: superRole._id
+      },
+      {
+        name: "team-members",
+        role: superRole._id
+      },
+      {
+        name: "roles",
+        role: superRole._id
+      },
+    )
   } catch (error) { };
 
   let invitedData;
@@ -60,6 +83,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Please use the email that was invited." });
     }
   }
+
 
   const result = await User.create({
     name,
