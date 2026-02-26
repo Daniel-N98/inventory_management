@@ -2,7 +2,7 @@
 
 import { signOut } from "next-auth/react";
 import { Button } from "./ui/button";
-import { Home, Package, ListChecks, Settings, Users, Shield } from "lucide-react";
+import { Home, Package, ListChecks, Settings, Users, Shield, UserRoundPen } from "lucide-react";
 
 export default function SideNav() {
   const navItems = [
@@ -39,8 +39,18 @@ export default function SideNav() {
             asChild
           >
             <a href={"/dashboard/account-settings"} className="flex items-center gap-2 w-full">
-              <Settings className="h-4 w-4" />
+              <UserRoundPen className="h-4 w-4" />
               <span className="hidden md:inline">Account settings</span>
+            </a>
+          </Button>
+          <Button
+            variant="ghost"
+            className="group flex items-center gap-2 justify-center md:justify-start text-zinc-800 dark:text-zinc-50 hover:bg-zinc-100 dark:hover:bg-zinc-700 w-full"
+            asChild
+          >
+            <a href={"/dashboard/site-settings"} className="flex items-center gap-2 w-full">
+              <Settings className="h-4 w-4" />
+              <span className="hidden md:inline">Site settings</span>
             </a>
           </Button>
           <Button onClick={() => signOut()} className="w-full">Sign out</Button>
