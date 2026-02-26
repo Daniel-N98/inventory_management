@@ -53,23 +53,28 @@ export async function POST(req: NextRequest) {
     await SiteSettings.create(
       {
         name: "site-settings",
-        role: superRole._id
+        editRole: superRole._id
       },
       {
         name: "categories",
-        role: superRole._id
+        editRole: superRole._id,
+        createRole: superRole._id
       },
       {
         name: "inventory-items",
-        role: superRole._id
+        editRole: superRole._id,
+        createRole: superRole._id
       },
       {
         name: "team-members",
-        role: superRole._id
+        editRole: superRole._id,
+        createRole: superRole._id,
+        inviteRole: superRole._id
       },
       {
         name: "roles",
-        role: superRole._id
+        editRole: superRole._id,
+        createRole: superRole._id
       },
     )
   } catch (error) { };
