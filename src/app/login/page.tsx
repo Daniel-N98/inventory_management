@@ -44,7 +44,7 @@ export default function AuthPage() {
       return;
     }
 
-    const loginRes = await signIn("credentials", { redirect: false, email, password });
+    const loginRes = await signIn("credentials", { redirect: false, email: email.toLowerCase(), password });
 
     setLoading(false);
 
@@ -52,7 +52,6 @@ export default function AuthPage() {
       setError("Invalid credentials.");
       return;
     }
-
     router.push("/dashboard");
   };
 
@@ -65,22 +64,14 @@ export default function AuthPage() {
 
     try {
       const token = searchParams.get("token");
-      const res: UserType | string = await postUser(name, email, password, token);
+      const res: UserType | string = await postUser(name, email.toLowerCase(), password, token);
       if (typeof res === "string") {
         console.log(res);
         setError(res);
         setLoading(false);
         return;
       }
-      // Auto-login after registration - Don't auto login - email verification required first.
-      // const loginRes = await signIn("credentials", { redirect: false, email, password });
       setLoading(false);
-
-      // if (loginRes?.error) {
-      //   setError("Registered but login failed: " + loginRes.error);
-      //   return;
-      // }
-
       toast.success("Account created - Please verify your email.");
       router.push("/login");
     } catch (error) {
