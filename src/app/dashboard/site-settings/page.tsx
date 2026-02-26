@@ -24,22 +24,17 @@ export default function SiteSettings() {
       setRoles(rolesResponse);
       if (siteSettingResponse) setSiteSettings(siteSettingResponse);
       console.log(siteSettingResponse);
-      
+
       setLoading(false);
     }
     loadData();
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-zinc-50 p-6 dark:bg-zinc-950 md:p-10">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Site Settings
-        </h1>
-        <p className="text-zinc-500 dark:text-zinc-400">
-          Manage permissions and access levels across your organization.
-        </p>
-      </header>
+    <div className="flex-1 p-4 md:p-8 overflow-x-auto">
+      <div className="mb-6 md:mb-8 gap-4">
+        <h1 className="text-2xl md:text-3xl font-semibold text-zinc-900 dark:text-zinc-50">Site Settings</h1>
+      </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
         {!loading ?
@@ -59,7 +54,7 @@ export default function SiteSettings() {
             {/* Site Settings */}
             <SiteSettingsSection roles={roles} currentRoles={siteSettings?.["Site Settings"]} />
           </>
-          : <LoadingIcon /> }
+          : <LoadingIcon />}
       </div>
     </div>
   );
