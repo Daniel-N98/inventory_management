@@ -8,7 +8,7 @@ interface InventoryCardProps {
 export default function InventoryCard({ title, onSubmit, children }: InventoryCardProps) {
 
   return (
-    <Card className="flex flex-col border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <Card className="flex flex-col bg-white dark:border-zinc-800 dark:bg-zinc-900">
       <CardHeader>
         <CardTitle className="text-zinc-900 dark:text-zinc-50">{title}</CardTitle>
       </CardHeader>
