@@ -62,9 +62,9 @@ export async function PATCH(request: Request) {
 
   try {
     const body: { _id: string; name: string, permission_level: number } = await request.json();
-
+    
     // Check user authentication
-    const auth = await requireAuth("roles", "editRole", body.name, body.permission_level);
+    const auth = await requireAuth("roles", "editRole", "", body.permission_level);
     if (!(auth && "user" in auth)) return auth as NextResponse;
 
     const updated = await Roles.findByIdAndUpdate(
