@@ -14,20 +14,26 @@ import { fetchRoles } from "@/lib/api/users.api";
 interface RolesDropdownProps {
   selected?: null;
   onSelect(role: Role): void;
+  preloadedRoles?: Role[];
 }
 
-export default function RolesDropdown({ onSelect }: RolesDropdownProps) {
+export default function RolesDropdown({ onSelect, preloadedRoles }: RolesDropdownProps) {
   const [open, setOpen] = useState(false);
   const [selectedName, setSelectedName] = useState<string>("Select a role");
   const [roles, setRoles] = useState<Role[]>([]);
 
   useEffect(() => {
     async function loadRoles() {
+      // If roles are given, don't fetch again.
+      if (preloadedRoles) {
+        setRoles(preloadedRoles);
+        return;
+      }
       const response = await fetchRoles();
       setRoles(response);
     }
     loadRoles();
-  }, [])
+  }, [preloadedRoles]);
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} >
