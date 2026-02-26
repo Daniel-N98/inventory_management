@@ -40,7 +40,7 @@ export async function GET() {
 export async function PATCH(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth = await requireAuth("Editor");
+  const auth = await requireAuth("team-members", "editRole");
   if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {
@@ -53,7 +53,7 @@ export async function PATCH(request: Request) {
       );
     }
     const roleFound = await Roles.findOne({ name: body.role }).lean();
-    const auth = await requireAuth(body.role); // User cannot update a user's role beyond their current role.
+    const auth = await requireAuth("", "", body.role); // User cannot update a user's role beyond their current role.
     if (!(auth && "user" in auth)) return auth as NextResponse;
 
     const updated = await User.findByIdAndUpdate(
@@ -93,7 +93,7 @@ export async function PATCH(request: Request) {
 export async function DELETE(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth = await requireAuth("Admin");
+  const auth = await requireAuth("team-members", "createRole");
   if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {

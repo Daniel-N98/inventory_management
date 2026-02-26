@@ -33,7 +33,7 @@ export async function GET() {
 export async function POST(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth = await requireAuth("Admin");
+  const auth = await requireAuth("categories", "createRole");
   if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
 export async function PATCH(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth = await requireAuth("Editor");
+  const auth = await requireAuth("categories", "editRole");
   if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {
@@ -95,7 +95,7 @@ export async function PATCH(request: Request) {
 export async function DELETE(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth = await requireAuth("Admin");
+  const auth = await requireAuth("categories", "editRole");
   if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {

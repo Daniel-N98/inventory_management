@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 export async function PATCH(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth = await requireAuth("Editor");
+  const auth = await requireAuth("site-settings", "editRole");
   if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {

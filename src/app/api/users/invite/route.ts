@@ -11,7 +11,7 @@ import { ResendEmail } from "@/types/resend";
 export async function POST(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth = await requireAuth("Admin");
+  const auth = await requireAuth("team-members", "inviteRole");
   if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {
