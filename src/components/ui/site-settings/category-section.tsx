@@ -2,6 +2,9 @@ import { Role } from "@/types/role";
 import { Button } from "../button";
 import PermissionSection from "./permission-section";
 import InventoryCard from "./card";
+import { ServerResponseType } from "@/types/site-settings";
+import { updateSiteSettings } from "@/lib/api/site-settings.api";
+import sendResultToast from "./utils";
 
 export default function CategoriesSection({ roles }: { roles: Role[] }) {
 
@@ -10,7 +13,10 @@ export default function CategoriesSection({ roles }: { roles: Role[] }) {
     const formData = new FormData(e.currentTarget);
     const createRole = formData.get("create-categories") as string;
     const editRole = formData.get("edit-categories") as string;
-    console.log(createRole, editRole, formData);
+    try {
+      const result: ServerResponseType = await updateSiteSettings("categories", editRole, createRole);
+      sendResultToast(editRole, createRole, result);
+    } catch (error) { };
   }
 
   return (

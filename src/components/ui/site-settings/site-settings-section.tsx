@@ -2,6 +2,9 @@ import { Role } from "@/types/role";
 import { Button } from "../button";
 import PermissionSection from "./permission-section";
 import InventoryCard from "./card";
+import { updateSiteSettings } from "@/lib/api/site-settings.api";
+import { ServerResponseType } from "@/types/site-settings";
+import sendResultToast from "./utils";
 
 export default function SiteSettingsSection({ roles }: { roles: Role[] }) {
 
@@ -9,8 +12,10 @@ export default function SiteSettingsSection({ roles }: { roles: Role[] }) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const editRole = formData.get("edit-site-settings") as string;
-    console.log(editRole, formData);
-
+    try {
+      const result: ServerResponseType = await updateSiteSettings("site-settings", editRole, "");
+      sendResultToast(editRole, "", result);
+    } catch (error) { };
   }
 
   return (
