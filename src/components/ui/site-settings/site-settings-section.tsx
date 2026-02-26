@@ -1,12 +1,17 @@
+"use client";
+
 import { Role } from "@/types/role";
 import { Button } from "../button";
 import PermissionSection from "./permission-section";
 import InventoryCard from "./card";
 import { updateSiteSettings } from "@/lib/api/site-settings.api";
-import { ServerResponseType } from "@/types/site-settings";
+import { ServerResponseType, SiteRoles } from "@/types/site-settings";
 import sendResultToast from "./utils";
+import { useState } from "react";
 
-export default function SiteSettingsSection({ roles }: { roles: Role[] }) {
+export default function SiteSettingsSection({ roles, currentRoles }: { roles: Role[], currentRoles: SiteRoles }) {
+
+  const [changeMade, setChangeMade] = useState<boolean>(false);
 
   async function updateSiteSettingsPermission(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -15,15 +20,16 @@ export default function SiteSettingsSection({ roles }: { roles: Role[] }) {
     try {
       const result: ServerResponseType = await updateSiteSettings("site-settings", editRole, "");
       sendResultToast(editRole, "", result);
+      setChangeMade(false);
     } catch (error) { };
   }
 
   return (
     <InventoryCard title="Site Settings" onSubmit={updateSiteSettingsPermission}>
       <div className="space-y-4">
-        <PermissionSection label="Edit" description="Who can edit Site Settings?" input_name="edit-site-settings" preloadedRoles={roles} />
+        <PermissionSection label="Edit" description="Who can edit Site Settings?" input_name="edit-site-settings" preloadedRoles={roles} selectedRole={currentRoles.editRole} setChangeMade={setChangeMade} />
       </div>
-      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-colors">
+      <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-colors" disabled={!changeMade}>
         Update Settings
       </Button>
     </InventoryCard>
