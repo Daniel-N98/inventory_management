@@ -30,13 +30,15 @@ export async function GET() {
 
 export async function POST(request: Request) {
   await dbConnect()
-  // Check user authentication
-  const auth = await requireAuth("roles", "createRole");
-  if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {
     const body = await request.json();
     const { name, permission_level } = body;
+
+    // Check user authentication
+    const auth = await requireAuth("roles", "createRole", "", permission_level);
+    if (!(auth && "user" in auth)) return auth as NextResponse;
+
     const role = await Roles.create({ name, permission_level });
 
     const formattedItem = {
@@ -57,12 +59,14 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   await dbConnect()
-  // Check user authentication
-  const auth = await requireAuth("roles", "editRole");
-  if (!(auth && "user" in auth)) return auth as NextResponse;
 
   try {
     const body: { _id: string; name: string, permission_level: number } = await request.json();
+
+    // Check user authentication
+    const auth = await requireAuth("roles", "editRole", body.name, body.permission_level);
+    if (!(auth && "user" in auth)) return auth as NextResponse;
+
     const updated = await Roles.findByIdAndUpdate(
       body._id,
       { name: body.name, permission_level: body.permission_level },
