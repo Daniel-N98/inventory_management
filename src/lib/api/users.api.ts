@@ -24,6 +24,16 @@ export async function fetchUsers(): Promise<UserType[]> {
   }
 }
 
+export async function fetchUserRole(): Promise<string | null> {
+  try {
+    const { data }: ServerResponse<string> = await apiClient.get("/users/role");
+    return data;
+  } catch (error) {
+    console.log("An error has occurred.");
+    return null;
+  }
+}
+
 export async function updateUserRole(_id: string, role: string): Promise<UserType | null> {
   try {
     const { data, error }: ServerResponse<UserType> = await apiClient.patch("/users", { _id, role });

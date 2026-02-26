@@ -12,18 +12,21 @@ import { Role } from "@/types/role";
 import { fetchRoles } from "@/lib/api/users.api";
 
 interface RolesDropdownProps {
-  selected?: null;
+  selected?: string | null;
   onSelect(role: Role): void;
   preloadedRoles?: Role[];
 }
 
-export default function RolesDropdown({ onSelect, preloadedRoles }: RolesDropdownProps) {
+export default function RolesDropdown({ selected, onSelect, preloadedRoles }: RolesDropdownProps) {
   const [open, setOpen] = useState(false);
   const [selectedName, setSelectedName] = useState<string>("Select a role");
   const [roles, setRoles] = useState<Role[]>([]);
 
   useEffect(() => {
     async function loadRoles() {
+      if (selected) {
+        setSelectedName(selected);
+      }
       // If roles are given, don't fetch again.
       if (preloadedRoles) {
         setRoles(preloadedRoles);
@@ -33,7 +36,7 @@ export default function RolesDropdown({ onSelect, preloadedRoles }: RolesDropdow
       setRoles(response);
     }
     loadRoles();
-  }, [preloadedRoles]);
+  }, [preloadedRoles, selected]);
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} >
@@ -51,6 +54,7 @@ export default function RolesDropdown({ onSelect, preloadedRoles }: RolesDropdow
             {roles.map((role: Role) => (
               <CommandItem
                 key={role._id}
+                defaultValue={selected || "Select a role"}
                 onSelect={() => {
                   setSelectedName(role.name); // update button text
                   onSelect(role);            // update hidden input in parent

@@ -33,8 +33,8 @@ export async function GET() {
 export async function POST(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth = await requireAuth("Admin");
-  if (!(auth && "user" in auth)) return auth as NextResponse;
+  const auth = await requireAuth("categories", "createRole");
+  if (typeof auth !== "boolean" && !(auth && "user" in auth)) return auth as NextResponse;
 
   try {
     const body = await request.json();
@@ -55,8 +55,8 @@ export async function POST(request: Request) {
 export async function PATCH(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth = await requireAuth("Editor");
-  if (!(auth && "user" in auth)) return auth as NextResponse;
+  const auth = await requireAuth("categories", "editRole");
+  if (typeof auth !== "boolean" && !(auth && "user" in auth)) return auth as NextResponse;
 
   try {
     const body: { _id: string; name: string } = await request.json();
@@ -95,8 +95,8 @@ export async function PATCH(request: Request) {
 export async function DELETE(request: Request) {
   await dbConnect()
   // Check user authentication
-  const auth = await requireAuth("Admin");
-  if (!(auth && "user" in auth)) return auth as NextResponse;
+  const auth = await requireAuth("categories", "editRole");
+  if (typeof auth !== "boolean" && !(auth && "user" in auth)) return auth as NextResponse;
 
   try {
     const { _id }: { _id: string } = await request.json()
