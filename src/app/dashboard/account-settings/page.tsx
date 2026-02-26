@@ -87,7 +87,7 @@ export default function Settings() {
 
   return (
     <div className="flex-1 p-4 md:p-8 overflow-x-auto bg-zinc-50 dark:bg-zinc-900">
-      <h1 className="text-2xl md:text-3xl font-semibold text-zinc-900 dark:text-zinc-50 mb-6">Settings</h1>
+      <h1 className="text-2xl md:text-3xl font-semibold text-zinc-900 dark:text-zinc-50 mb-6">Account Settings</h1>
 
       {/* Profile Settings */}
       <Card className="mb-6 bg-white dark:bg-zinc-800">
