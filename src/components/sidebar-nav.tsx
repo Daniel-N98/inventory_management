@@ -32,7 +32,7 @@ export default function SideNav() {
   return (
     <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-6 flex flex-col">
       <div className="flex flex-col mb-8 space-y-1 items-center md:items-start">
-        <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">InvManager</h2>
+        <a href="/dashboard" className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">InvManager</a>
         <div className="mt-1.5 flex items-center">
           <span className="relative flex h-2 w-2 mr-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
@@ -60,7 +60,7 @@ export default function SideNav() {
           ))}
         </div>
         <div className="space-y-4">
-          <div className="flex md:flex-col justify-center md:justify-start md:items-start w-max md:w-full m-auto md:m-0 md:mb-4">
+          <div className="flex md:flex-col justify-center md:justify-start md:items-start w-max md:w-full m-auto md:m-0 mb-2 md:mb-4">
             <Button
               variant="ghost"
               className="group flex items-center gap-2 justify-center md:justify-start text-zinc-800 dark:text-zinc-50 hover:bg-zinc-100 dark:hover:bg-zinc-700 w-full"
