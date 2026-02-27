@@ -66,7 +66,6 @@ export default function AuthPage() {
       const token = searchParams.get("token");
       const res: UserType | string = await postUser(name, email.toLowerCase(), password, token);
       if (typeof res === "string") {
-        console.log(res);
         setError(res);
         setLoading(false);
         return;

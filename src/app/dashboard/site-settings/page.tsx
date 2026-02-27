@@ -23,8 +23,6 @@ export default function SiteSettings() {
       const siteSettingResponse: FormattedSiteSettings | null = await fetchSiteSettings();
       setRoles(rolesResponse);
       if (siteSettingResponse) setSiteSettings(siteSettingResponse);
-      console.log(siteSettingResponse);
-
       setLoading(false);
     }
     loadData();
