@@ -1,4 +1,6 @@
 "use client"
+import { NavBarContext } from "@/app/context/NavBarContext";
+import { useNavBar } from "@/app/context/NavBarHook";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldTitle } from "@/components/ui/field";
@@ -8,7 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { checkSuperUser, toggleSuperUser, updateUserName, updateUserPassword } from "@/lib/api/users.api";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function Settings() {
@@ -18,6 +20,7 @@ export default function Settings() {
   const [profile, setProfile] = useState({ name: "John Doe", email: "john@example.com" });
   const [loading, setLoading] = useState<boolean>(true);
   const [isSuperUser, setIsSuperUser] = useState<boolean>(false);
+  const { setContextValue } = useNavBar();
 
   useEffect(() => {
     if (status === "loading") return; // wait until session is loaded
@@ -49,6 +52,7 @@ export default function Settings() {
   async function handleToggleSuperUser() {
     const result: boolean = await toggleSuperUser(!isSuperUser);
     if (result) {
+      setContextValue({ userRole: !isSuperUser ? "Super" : "Default" });
       setIsSuperUser(!isSuperUser);
     }
   }

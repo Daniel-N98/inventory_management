@@ -5,9 +5,12 @@ import { Button } from "./ui/button";
 import { Home, Package, ListChecks, Settings, Users, Shield, UserRoundPen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { fetchUserRole } from "@/lib/api/users.api";
+import { useNavBar } from "@/app/context/NavBarHook";
+
 
 export default function SideNav() {
   const [userRole, setUserRole] = useState<string | null>(null);
+  const { contextValue, setContextValue } = useNavBar();
 
   const navItems = [
     { label: "Dashboard", icon: <Home className="h-4 w-4" />, href: "/dashboard" },
@@ -21,6 +24,7 @@ export default function SideNav() {
     async function loadUser() {
       const userRes = await fetchUserRole();
       setUserRole(userRes ? userRes : "Unknown");
+      setContextValue({ userRole: userRes ?? "Unknown" })
     }
     loadUser();
   }, []);
@@ -35,7 +39,7 @@ export default function SideNav() {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
           </span>
           <p className="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 rounded-md shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-            {userRole}
+            {contextValue?.userRole || "Unknown"}
           </p>
         </div>
       </div>

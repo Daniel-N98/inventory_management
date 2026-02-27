@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "./providers";
 import { Toaster } from "react-hot-toast";
 import { Suspense } from "react";
+import { NavBarProvider } from "./context/NavBarContext";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -30,12 +31,14 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Suspense>
-          <div className="flex-1">
-            <Toaster />
-            <Providers>{children}</Providers>
-          </div>
-        </Suspense>
+        <NavBarProvider>
+          <Suspense>
+            <div className="flex-1">
+              <Toaster />
+              <Providers>{children}</Providers>
+            </div>
+          </Suspense>
+        </NavBarProvider>
       </body>
     </html>
   );

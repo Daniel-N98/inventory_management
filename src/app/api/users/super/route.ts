@@ -58,7 +58,8 @@ export async function PATCH(request: NextRequest) {
     }
     const body: { value: boolean } = await request.json();
     const superRole = await Roles.findOne({name: "Super"});
-    await User.findByIdAndUpdate(user._id, { superUser: body.value, role: superRole._id });
+    const defaultRole = await Roles.findOne({name: "Default"});
+    await User.findByIdAndUpdate(user._id, { superUser: body.value, role: body.value === true ? superRole._id : defaultRole._id });
 
     return NextResponse.json(
       {
