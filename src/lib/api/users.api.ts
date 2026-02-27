@@ -76,6 +76,34 @@ export async function updateUserPassword(_id: string, current: string, newPasswo
   }
 }
 
+export async function toggleSuperUser(value: boolean): Promise<boolean> {
+  try {
+    const { data, error }: ServerResponse<boolean> = await apiClient.patch("/users/super", { value });
+    if (error) {
+      toast.error(error);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.log("An error has occurred.");
+    return false;
+  }
+}
+
+export async function checkSuperUser(): Promise<boolean> {
+  try {
+    const { data, error }: ServerResponse<boolean> = await apiClient.get("/users/super");
+    if (error) {
+      toast.error(error);
+      return false;
+    }
+    return data;
+  } catch (error) {
+    console.log("An error has occurred.");
+    return false;
+  }
+}
+
 export async function deleteUserById(userId: string): Promise<UserType | null> {
   try {
     const { data, error }: ServerResponse<UserType> = await apiClient.delete("/users", { data: { _id: userId } });
@@ -105,7 +133,7 @@ export async function postUser(name: string, email: string, password: string, to
 
 export async function verifyUserEmail(token: string): Promise<boolean> {
   try {
-    const {data} = await apiClient.get(`/users/verify-email?token=${token}`);
+    const { data } = await apiClient.get(`/users/verify-email?token=${token}`);
     return data;
   } catch (error) {
     console.log("An error has occurred.");
@@ -116,11 +144,11 @@ export async function verifyUserEmail(token: string): Promise<boolean> {
 
 export async function checkEmailVerification(email: string): Promise<boolean> {
   try {
-    const {data} = await apiClient.get(`users/verify-login?email=${email}`);
+    const { data } = await apiClient.get(`users/verify-login?email=${email}`);
     return data;
   } catch (error) {
     console.log("An error has occurred.");
     return false;
-    
+
   }
 }
