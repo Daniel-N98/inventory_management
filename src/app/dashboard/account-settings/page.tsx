@@ -114,7 +114,7 @@ export default function Settings() {
       {!loading ?
         <>
           {/* SuperUser toggle */}
-          <FieldGroup className="w-full max-w-sm mb-4" onClick={() => handleToggleSuperUser()}>
+          <FieldGroup className="w-full max-w-sm m-auto lg:m-0 lg:mb-4 mb-4" onClick={() => handleToggleSuperUser()}>
             <FieldLabel htmlFor="switch-share">
               <Field orientation="horizontal">
                 <FieldContent>
